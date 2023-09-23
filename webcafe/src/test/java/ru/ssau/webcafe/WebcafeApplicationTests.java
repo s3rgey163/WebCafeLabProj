@@ -1,4 +1,4 @@
-package ssau.web.webcafe;
+package ru.ssau.webcafe;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
