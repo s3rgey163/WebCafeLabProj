@@ -1,15 +1,18 @@
 package ru.ssau.webcafe.entity;
 
+import lombok.Getter;
+
 public enum VolumeType {
-    ML("Миллилитры"),
-    L("Литры"),
-    G("Граммы"),
-    KG("Килограммы"),
+    ML("мл."),
+    L("л."),
+    G("г."),
+    KG("кг."),
     ;
 
-    private String name;
+    @Getter
+    private String typeName;
 
-    VolumeType(String name) {
-        this.name = name;
+    VolumeType(String typeName) {
+        this.typeName = typeName;
     }
 }

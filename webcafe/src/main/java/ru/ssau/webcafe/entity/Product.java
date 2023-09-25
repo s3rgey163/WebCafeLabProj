@@ -13,9 +13,12 @@ import java.util.Set;
 
     private String name;
 
+    private int price;
+
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
 
     @OneToMany
-    private Set<StructurePrice> structures;
+    @JoinColumn
+    private Set<StructurePrice> structure;
 }

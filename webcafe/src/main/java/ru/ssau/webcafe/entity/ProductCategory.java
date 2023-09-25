@@ -2,6 +2,8 @@ package ru.ssau.webcafe.entity;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+
 public enum ProductCategory {
     COFFEE("Кофе"),
     DESSERTS("Десерты"),
@@ -34,5 +36,12 @@ public enum ProductCategory {
     @Override
     public String toString() {
         return "%s [%s]".formatted(name(), category);
+    }
+
+    public static ProductCategory of(String nameCategory) {
+        return Arrays.stream(values())
+                .filter(v -> v.getCategory().equals(nameCategory))
+                .findAny()
+                .orElseThrow(IllegalArgumentException::new);
     }
 }

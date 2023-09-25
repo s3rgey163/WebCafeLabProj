@@ -1,8 +1,7 @@
 package ru.ssau.webcafe.entity;
-
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-public record Volume(VolumeType type, int value) {
+public record Volume(int value, VolumeType type) {
+    @Override
+    public String toString() {
+        return "%s %s".formatted(value, type.getTypeName());
+    }
 }

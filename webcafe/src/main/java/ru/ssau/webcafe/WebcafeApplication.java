@@ -12,7 +12,9 @@ public class WebcafeApplication {
 
 	public static void main(String[] args) {
 //		SpringApplication.run(WebcafeApplication.class, args);
-		Volume volume = new Volume(VolumeType.KG, 200);
+		Volume volume = new Volume(200, VolumeType.ML);
+		Volume volume2 = new Volume(1, VolumeType.L);
+		System.out.println(volume);
 	}
 
 }
