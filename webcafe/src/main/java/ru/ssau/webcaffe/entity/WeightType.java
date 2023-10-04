@@ -1,18 +1,19 @@
-package ru.ssau.webcafe.entity;
+package ru.ssau.webcaffe.entity;
 
 import lombok.Getter;
 
-public enum VolumeType {
+public enum WeightType {
     ML("мл."),
     L("л."),
     G("г."),
     KG("кг."),
+    MG("мг.")
     ;
 
     @Getter
     private String typeName;
 
-    VolumeType(String typeName) {
+    WeightType(String typeName) {
         this.typeName = typeName;
     }
 }

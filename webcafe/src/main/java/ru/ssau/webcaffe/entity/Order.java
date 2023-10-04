@@ -1,7 +1,8 @@
-package ru.ssau.webcafe.entity;
+package ru.ssau.webcaffe.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.Date;
 import java.util.List;
@@ -14,14 +15,19 @@ import java.util.List;
     private long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id")
+    @Column(nullable = false)
     private Customer customer;
 
-    @ManyToMany(mappedBy = "id")
+    @ManyToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @Column(nullable = false)
     private List<Product> products;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Promotion promotion;
 
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date date;
 
     private String commentary;

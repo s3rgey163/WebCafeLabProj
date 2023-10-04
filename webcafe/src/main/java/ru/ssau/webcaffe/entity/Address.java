@@ -1,4 +1,4 @@
-package ru.ssau.webcafe.entity;
+package ru.ssau.webcaffe.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

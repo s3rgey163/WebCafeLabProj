@@ -1,4 +1,4 @@
-package ru.ssau.webcafe.entity;
+package ru.ssau.webcaffe.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -25,4 +25,11 @@ import java.util.Set;
 
     @ManyToMany
     private Set<Address> addresses;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "customer",
+            cascade = CascadeType.ALL
+    )
+    private Set<Order> orders;
 }
