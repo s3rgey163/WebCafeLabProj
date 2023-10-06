@@ -18,7 +18,7 @@ import java.util.List;
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @ManyToMany
     @Column(nullable = false)
     private List<Product> products;
 
