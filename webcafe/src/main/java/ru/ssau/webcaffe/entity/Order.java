@@ -16,10 +16,9 @@ import java.util.List;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id")
-    @Column(nullable = false)
     private Customer customer;
 
-    @ManyToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @ManyToMany
     @Column(nullable = false)
     private List<Product> products;
 
