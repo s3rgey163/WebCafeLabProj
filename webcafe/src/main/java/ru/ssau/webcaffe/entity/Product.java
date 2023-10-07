@@ -7,8 +7,7 @@ import java.util.Set;
 @Entity
 @Table
 @Data public class Product {
-
-    private static final String JOIN_CATEGORY_ID = "category_id";
+    public static final String FK_NAME = "product_id";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
@@ -16,7 +15,7 @@ import java.util.Set;
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = JOIN_CATEGORY_ID)
+    @JoinColumn(name = Category.FK_NAME)
     private Category category;
 
     @OneToMany(

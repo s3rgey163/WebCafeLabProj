@@ -8,6 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "ProductCategory")
 @Data public class Category {
+    public static final String FK_NAME = "category_id";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
@@ -15,6 +16,7 @@ import java.util.List;
     private String name;
 
     private String describe;
+
 
     @OneToMany(
             mappedBy = "category",

@@ -20,7 +20,7 @@ import java.util.Set;
 
     private int discount;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<ProductType> productTypes;
 
     public Promotion() {
@@ -42,11 +42,12 @@ import java.util.Set;
 
 
 
-    private String generateCode() {
+    private static String generateCode() {
         return null;
     }
 
     public static void main(String[] args) {
-        System.out.println();
+        Promotion p = new Promotion();
+        System.out.println(p.hashCode());
     }
 }

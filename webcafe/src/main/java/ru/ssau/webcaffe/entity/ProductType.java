@@ -13,7 +13,7 @@ import lombok.Data;
     private Weight weight;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = Product.FK_NAME)
     private Product product;
 
     private int price;
