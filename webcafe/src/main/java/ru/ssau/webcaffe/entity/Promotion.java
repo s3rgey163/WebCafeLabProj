@@ -20,12 +20,13 @@ import java.util.Set;
 
     private int discount;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     private Set<ProductType> productTypes;
 
-    public Promotion() {
+    @ManyToMany
+    private Set<ProductType> conditionProductTypes;
 
-    }
+    public Promotion() {}
     public Promotion(
             long id,
             String code,

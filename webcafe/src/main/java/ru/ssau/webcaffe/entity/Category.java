@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "ProductCategory")
@@ -23,7 +24,7 @@ import java.util.List;
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL
     )
-    private List<Product> products;
+    private Set<Product> products;
 
     public Category() {}
 
@@ -39,7 +40,7 @@ import java.util.List;
         this(0, name, null, null);
     }
 
-    public Category(String name, String describe, List<Product> products) {
+    public Category(String name, String describe, Set<Product> products) {
         this(0, name, describe, products);
     }
 
@@ -47,7 +48,7 @@ import java.util.List;
             long id,
             String name,
             String describe,
-            List<Product> products
+            Set<Product> products
     ) {
         this.id = id;
         this.name = name;
@@ -55,7 +56,7 @@ import java.util.List;
         this.products = products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(Set<Product> products) {
         this.products = products;
         this.products.forEach(p ->  p.setCategory(this));
     }

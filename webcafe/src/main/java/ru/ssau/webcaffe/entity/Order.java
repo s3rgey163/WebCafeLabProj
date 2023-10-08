@@ -2,25 +2,27 @@ package ru.ssau.webcaffe.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.antlr.v4.runtime.misc.NotNull;
-
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "customer_order")
 @Data public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-    @ManyToMany
+    @OneToMany(
+            mappedBy = "id.order",
+            cascade = CascadeType.ALL
+    )
     @Column(nullable = false)
-    private List<Product> products;
+    private Set<OrderPosition> positions;
 
     @ManyToOne
     private Promotion promotion;

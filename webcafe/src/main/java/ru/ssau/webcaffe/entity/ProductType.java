@@ -3,8 +3,10 @@ package ru.ssau.webcaffe.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Entity
-@Table
+@Table(name = "product_type")
 @Data public class ProductType {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -16,7 +18,7 @@ import lombok.Data;
     @JoinColumn(name = Product.FK_NAME)
     private Product product;
 
-    private int price;
+    private BigDecimal price;
 
     private String describe;
 }

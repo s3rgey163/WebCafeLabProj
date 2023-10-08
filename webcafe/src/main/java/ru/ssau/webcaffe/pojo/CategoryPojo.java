@@ -5,7 +5,9 @@ import lombok.Data;
 import ru.ssau.webcaffe.entity.Category;
 import ru.ssau.webcaffe.entity.Product;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Data public class CategoryPojo {
@@ -15,7 +17,7 @@ import java.util.List;
 
     private String describe;
 
-    private List<Product> products;
+    private Set<Product> products;
 
     public Category toEntity() {
         return new Category(
@@ -31,7 +33,7 @@ import java.util.List;
                 category.getId(),
                 category.getName(),
                 category.getDescribe(),
-                category.getProducts()
+                new HashSet<>(category.getProducts())
         );
     }
 }
