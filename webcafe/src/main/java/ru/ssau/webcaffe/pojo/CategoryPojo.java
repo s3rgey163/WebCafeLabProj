@@ -6,7 +6,6 @@ import ru.ssau.webcaffe.entity.Category;
 import ru.ssau.webcaffe.entity.Product;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor

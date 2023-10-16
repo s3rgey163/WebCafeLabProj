@@ -3,6 +3,7 @@ package ru.ssau.webcaffe.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -38,7 +39,7 @@ import java.util.Set;
         this.code = code;
         this.validDays = validDays;
         this.discount = discount;
-        this.productTypes = productTypes;
+        this.productTypes = new HashSet<>(productTypes);
     }
 
 

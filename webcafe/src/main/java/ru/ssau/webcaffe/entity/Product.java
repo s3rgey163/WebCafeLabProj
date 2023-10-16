@@ -1,11 +1,15 @@
 package ru.ssau.webcaffe.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 @Entity
 @Table
+@AllArgsConstructor
+@NoArgsConstructor
 @Data public class Product {
     public static final String FK_NAME = "product_id";
     @Id

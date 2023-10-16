@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 
 @AllArgsConstructor
 public class ProductTypePojo {
+    private long id;
+
     private Weight weight;
 
     private BigDecimal price;
@@ -20,9 +22,14 @@ public class ProductTypePojo {
 
     public static ProductTypePojo ofEntity(ProductType productType) {
         return new ProductTypePojo(
+                productType.getId(),
                 productType.getWeight(),
                 productType.getPrice(),
                 productType.getDescribe()
         );
+    }
+
+    public ProductType toEntity() {
+        return new ProductType(id, weight, null, price, describe);
     }
 }

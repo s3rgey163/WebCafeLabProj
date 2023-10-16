@@ -1,7 +1,8 @@
 package ru.ssau.webcaffe.service;
 
 import ru.ssau.webcaffe.entity.ProductType;
+import ru.ssau.webcaffe.pojo.ProductTypePojo;
 
 public interface ProductService {
-    ProductType getProductType(long id);
+    ProductTypePojo getProductType(long id);
 }

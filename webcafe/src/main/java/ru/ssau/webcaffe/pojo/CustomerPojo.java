@@ -1,6 +1,5 @@
 package ru.ssau.webcaffe.pojo;
 
-import jakarta.persistence.*;
 import lombok.Data;
 import ru.ssau.webcaffe.entity.Address;
 import ru.ssau.webcaffe.entity.Order;
@@ -8,7 +7,7 @@ import ru.ssau.webcaffe.entity.Order;
 import java.util.Date;
 import java.util.Set;
 
-@Data public class CutomerPojo {
+@Data public class CustomerPojo {
     private long id;
     private String name;
 
@@ -21,4 +20,6 @@ import java.util.Set;
     private Set<Address> addresses;
 
     private Set<Order> orders;
+
+
 }
