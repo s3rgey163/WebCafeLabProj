@@ -13,10 +13,6 @@ import ru.ssau.webcaffe.entity.Address;
 
     private int apartment;
 
-    public Address toEntity() {
-        return new Address(id, state, street, apartment);
-    }
-
     public static AddressPojo ofEntity(Address address) {
         return new AddressPojo(
                 address.getId(),
@@ -24,5 +20,9 @@ import ru.ssau.webcaffe.entity.Address;
                 address.getStreet(),
                 address.getApartment()
         );
+    }
+
+    public Address toEntity() {
+        return new Address(id, state, street, apartment);
     }
 }

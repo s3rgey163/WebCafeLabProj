@@ -1,13 +1,18 @@
 package ru.ssau.webcaffe.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "customer_order")
+@AllArgsConstructor
+@NoArgsConstructor
 @Data public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

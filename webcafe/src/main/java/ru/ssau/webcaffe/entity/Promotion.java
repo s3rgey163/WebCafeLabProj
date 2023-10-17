@@ -1,13 +1,17 @@
 package ru.ssau.webcaffe.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table
+@AllArgsConstructor
+@NoArgsConstructor
 @Data public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -26,30 +30,4 @@ import java.util.Set;
 
     @ManyToMany
     private Set<ProductType> conditionProductTypes;
-
-    public Promotion() {}
-    public Promotion(
-            long id,
-            String code,
-            int validDays,
-            int discount,
-            Set<ProductType> productTypes
-    ) {
-        this.id = id;
-        this.code = code;
-        this.validDays = validDays;
-        this.discount = discount;
-        this.productTypes = new HashSet<>(productTypes);
-    }
-
-
-
-    private static String generateCode() {
-        return null;
-    }
-
-    public static void main(String[] args) {
-        Promotion p = new Promotion();
-        System.out.println(p.hashCode());
-    }
 }

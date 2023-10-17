@@ -1,13 +1,17 @@
 package ru.ssau.webcaffe.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table
+@AllArgsConstructor
+@NoArgsConstructor
 @Data public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -23,7 +27,7 @@ import java.util.Set;
 
     private Date birthday;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Address> addresses;
 
     @OneToMany(

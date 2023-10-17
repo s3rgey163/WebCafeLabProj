@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -65,6 +66,19 @@ public class Util {
         }
         return t;
     }
+
+    public static <T, R, C extends Collection<R>> C collectionMapper(
+            Collection<T> original,
+            Function<T, R> mapper,
+            Supplier<C> newCollection
+    ) {
+        Objects.requireNonNull(mapper);
+        Objects.requireNonNull(original);
+        return original.stream()
+                .map(mapper)
+                .collect(newCollection, Collection::add, Collection::addAll);
+    }
+
 
     public static void main(String[] args) {
         var l1 = new Object() {
