@@ -18,5 +18,6 @@ import java.util.stream.Stream;
 @SpringBootApplication
 public class WebcaffeApplication {
     public static void main(String[] args) {
+        SpringApplication.run(WebcaffeApplication.class, args);
     }
 }

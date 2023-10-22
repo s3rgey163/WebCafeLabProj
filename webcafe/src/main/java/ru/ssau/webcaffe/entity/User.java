@@ -6,17 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = User.TABLE_NAME)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data public class User {
+    public static final String TABLE_NAME = "cff_user";
+    public static final String PK_NAME = TABLE_NAME + "_id";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
@@ -32,8 +32,8 @@ import java.util.Set;
 
     @ElementCollection(targetClass = Role.class)
     @CollectionTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id")
+            name = TABLE_NAME + "_role",
+            joinColumns = @JoinColumn(name = PK_NAME)
     )
     @Enumerated(EnumType.STRING)
     private Set<Role> role;
