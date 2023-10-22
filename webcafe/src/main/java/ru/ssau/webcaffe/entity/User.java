@@ -2,8 +2,10 @@ package ru.ssau.webcaffe.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
@@ -12,6 +14,8 @@ import java.util.Set;
 
 @Entity
 @Table
+@AllArgsConstructor
+@NoArgsConstructor
 @Data public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -41,9 +45,6 @@ import java.util.Set;
     )
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     private LocalDateTime created;
-
-    @Transient
-    private Collection<? extends GrantedAuthority> authorities;
 
     @PrePersist
     protected void onCreate() {

@@ -20,10 +20,6 @@ public class Util {
 
     private Util() {}
 
-//    public static String generateRandomString(int length) {
-//        final var baseReference = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-//    }
-
     public static String generateRandomString(
             CharSequence referenceRange,
             int length

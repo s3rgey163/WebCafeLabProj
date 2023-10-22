@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.ssau.webcaffe.entity.Customer;
+import ru.ssau.webcaffe.entity.User;
 import ru.ssau.webcaffe.util.Util;
 
 import java.util.Date;
@@ -23,6 +24,8 @@ import java.util.Set;
     private String middleName;
 
     private Date birthday;
+
+    private UserPojo userPojo;
 
     private Set<AddressPojo> addressPojos;
 
@@ -52,6 +55,7 @@ import java.util.Set;
                 secondName,
                 middleName,
                 (Date) birthday.clone(),
+                userPojo.toEntity(),
                 addressPojos == null
                         ? null
                         : Util.collectionMapper(addressPojos, AddressPojo::toEntity, HashSet::new),

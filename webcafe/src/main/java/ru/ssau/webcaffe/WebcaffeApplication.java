@@ -17,13 +17,6 @@ import java.util.stream.Stream;
 
 @SpringBootApplication
 public class WebcaffeApplication {
-
     public static void main(String[] args) {
-        var l = Stream.of(new int[]{1,2,3}, new int[] {4,5,6}, new int[]{7,8,9}).map(ints -> ints.length).toArray();
-        System.out.println(Arrays.toString(l));
-        RepositoryService.RepositoryResultHandler<Promotion> result = new RepositoryService.RepositoryResultHandler<>(new Promotion());
-        result.doBeforeCloseSession(Hibernate::initialize)
-                .thenApply(PromotionPojo::ofEntity);
     }
-
 }
