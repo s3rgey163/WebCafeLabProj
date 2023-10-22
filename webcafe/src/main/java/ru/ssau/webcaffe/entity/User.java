@@ -28,6 +28,7 @@ import java.util.Set;
     private String email;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @ElementCollection(targetClass = Role.class)

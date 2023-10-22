@@ -3,13 +3,13 @@ package ru.ssau.webcaffe.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "ProductCategory")
+@Table(name = Category.TABLE_NAME)
 @Data public class Category {
-    public static final String FK_NAME = "category_id";
+    public static final String TABLE_NAME = "product_category";
+    public static final String REFERENCE_PK_NAME = TABLE_NAME + "_id";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;

@@ -19,7 +19,7 @@ import java.util.Set;
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = Category.FK_NAME)
+    @JoinColumn(name = Category.REFERENCE_PK_NAME)
     private Category category;
 
     @OneToMany(
