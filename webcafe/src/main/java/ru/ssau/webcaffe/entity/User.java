@@ -1,10 +1,14 @@
 package ru.ssau.webcaffe.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table
@@ -21,8 +25,25 @@ import java.time.LocalDateTime;
 
     @Column(nullable = false)
     private Gender gender;
-    @Column(nullable = false)
+
+    @ElementCollection(targetClass = Role.class)
+    @CollectionTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
+    @Enumerated(EnumType.STRING)
+    private Set<Role> role;
+
+    @Column(
+            unique = true,
+            nullable = false,
+            updatable = false
+    )
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     private LocalDateTime created;
+
+    @Transient
+    private Collection<? extends GrantedAuthority> authorities;
 
     @PrePersist
     protected void onCreate() {
