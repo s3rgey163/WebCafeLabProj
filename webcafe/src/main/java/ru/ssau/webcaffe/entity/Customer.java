@@ -27,6 +27,10 @@ import java.util.Set;
 
     private Date birthday;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Address> addresses;
 
