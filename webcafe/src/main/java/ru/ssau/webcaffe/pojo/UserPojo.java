@@ -1,10 +1,7 @@
 package ru.ssau.webcaffe.pojo;
 
-import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import ru.ssau.webcaffe.entity.User;
 
@@ -25,7 +22,7 @@ public class UserPojo {
 
     private User.Gender gender;
 
-    private Set<User.Role> role;
+    private Set<User.AuthRole> authRole;
 
     private LocalDateTime created;
 
@@ -38,7 +35,7 @@ public class UserPojo {
                 .withPassword(user.getPassword())
                 .withEmail(user.getEmail())
                 .withGender(user.getGender())
-                .withRole(user.getRole())
+                .withAuthRole(user.getAuthRole())
                 .withCreated(user.getCreated())
                 .build();
     }
@@ -50,7 +47,7 @@ public class UserPojo {
                 password,
                 email,
                 gender,
-                role,
+                authRole,
                 created
         );
     }

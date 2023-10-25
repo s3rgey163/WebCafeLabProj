@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class WebcaffeApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void contextLoads() throws ClassNotFoundException {
+		Class.forName("ru.ssau.webcaffe.repo.UserRepositoryTest");
 	}
 
 }

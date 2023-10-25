@@ -31,13 +31,13 @@ import java.util.Set;
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ElementCollection(targetClass = Role.class)
+    @ElementCollection(targetClass = AuthRole.class, fetch = FetchType.EAGER)
     @CollectionTable(
             name = TABLE_NAME + "_role",
             joinColumns = @JoinColumn(name = PK_NAME)
     )
     @Enumerated(EnumType.STRING)
-    private Set<Role> role;
+    private Set<AuthRole> authRole;
 
     @Column(
             unique = true,
@@ -68,14 +68,14 @@ import java.util.Set;
     }
 
     @Getter
-    public enum Role {
+    public enum AuthRole {
         USER("Пользователь"),
         ADMIN("Администратор"),
         ;
 
         private final String name;
 
-        Role(String name) {
+        AuthRole(String name) {
             this.name = name;
         }
     }
