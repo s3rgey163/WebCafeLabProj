@@ -1,13 +1,12 @@
 package ru.ssau.webcaffe.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,9 +32,10 @@ import java.util.Set;
     @ManyToOne
     private Promotion promotion;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private LocalDateTime date;
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
+    private LocalDateTime dateTime;
 
     private String commentary;
 }
