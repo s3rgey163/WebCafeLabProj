@@ -2,9 +2,13 @@ package ru.ssau.webcaffe.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import ru.ssau.webcaffe.entity.Product;
 import ru.ssau.webcaffe.entity.ProductType;
+
+import java.util.List;
 
 @Repository
 public interface ProductTypeRepository extends JpaRepository<ProductType, Long> {
-    ProductType getProductTypeByProductId(long id);
+    List<ProductType> getByProduct(Product product);
+    List<ProductType> getByProductId(long id);
 }
