@@ -29,7 +29,7 @@ import java.util.Set;
     private Date birthday;
 
     @OneToOne
-    @JoinColumn(name = User.PK_NAME)
+    @JoinColumn(name = User.PK_NAME, nullable = false)
     private User user;
 
     @ManyToMany(fetch = FetchType.LAZY)

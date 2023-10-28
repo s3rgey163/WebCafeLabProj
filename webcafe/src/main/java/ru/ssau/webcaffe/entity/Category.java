@@ -14,6 +14,7 @@ import java.util.Set;
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
+    @Column(unique = true)
     private String name;
 
     private String describe;
