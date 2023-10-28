@@ -3,10 +3,13 @@ package ru.ssau.webcaffe.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 import ru.ssau.webcaffe.entity.Order;
 import ru.ssau.webcaffe.entity.OrderPosition;
 import ru.ssau.webcaffe.util.Util;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +20,7 @@ import java.util.Set;
 public class OrderPojo {
     private long id;
 
-    private Date date;
+    private LocalDateTime date;
 
     private PromotionPojo promotionPojo;
 
@@ -28,7 +31,7 @@ public class OrderPojo {
     public static OrderPojo ofEntity(Order order) {
         return new OrderPojo(
                 order.getId(),
-                (Date) order.getDate().clone(),
+                order.getDate(),
                 order.getPromotion() == null
                         ? null
                         : PromotionPojo.ofEntity(order.getPromotion()),
@@ -57,7 +60,7 @@ public class OrderPojo {
                 promotionPojo == null
                         ? null
                         : promotionPojo.toEntity(),
-                (Date) date.clone(),
+                date,
                 commentary
         );
     }
