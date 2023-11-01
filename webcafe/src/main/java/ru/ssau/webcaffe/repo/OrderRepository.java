@@ -12,13 +12,13 @@ import java.util.*;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
     String FIND_BY_DATA_OF_MONTH_QUERY = "from Order o " +
-            "where year(cast(o.date as timestamp)) = :year" +
-            " and month(cast(o.date as timestamp)) = :month" +
-            " and day(cast(o.date as timestamp)) = :day";
+            "where year(cast(o.dateTime as timestamp)) = :year" +
+            " and month(cast(o.dateTime as timestamp)) = :month" +
+            " and day(cast(o.dateTime as timestamp)) = :day";
     String FIND_BY_DAY_OF_MONTH_ASC_QUERY = FIND_BY_DATA_OF_MONTH_QUERY
-            + " order by o.date";
+            + " order by o.dateTime";
     String FIND_BY_DAY_OF_MONTH_DESC_QUERY = FIND_BY_DATA_OF_MONTH_QUERY
-            + " order by o.date desc";
+            + " order by o.dateTime desc";
     List<Order> getByCustomerAndDateTimeBetweenOrderByDateTime(
             Customer customer,
             LocalDateTime when,

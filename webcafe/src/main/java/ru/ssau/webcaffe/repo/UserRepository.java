@@ -5,12 +5,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.ssau.webcaffe.entity.User;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    Optional<User> getUsersById(long id);
     Optional<User> getUserByLogin(String login);
 
     Optional<User> getUserByEmail(String email);

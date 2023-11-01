@@ -2,18 +2,19 @@ package ru.ssau.webcaffe.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
 @Table(name = User.TABLE_NAME)
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@Builder(setterPrefix = "with")
 @Data public class User {
     public static final String TABLE_NAME = "cff_user";
     public static final String PK_NAME = TABLE_NAME + "_id";
@@ -31,6 +32,9 @@ import java.util.Set;
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @OneToOne
+    private Customer customer;
+
     @ElementCollection(targetClass = AuthRole.class, fetch = FetchType.EAGER)
     @CollectionTable(
             name = TABLE_NAME + "_role",
@@ -47,13 +51,6 @@ import java.util.Set;
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     private LocalDateTime created;
 
-    @PrePersist
-    protected void onCreate() {
-        this.created = LocalDateTime.now();
-    }
-
-
-
     @Getter
     public enum Gender {
         MALE("Мужчина"),
@@ -68,7 +65,7 @@ import java.util.Set;
     }
 
     @Getter
-    public enum AuthRole {
+    public enum AuthRole implements GrantedAuthority{
         USER("Пользователь"),
         ADMIN("Администратор"),
         ;
@@ -77,6 +74,11 @@ import java.util.Set;
 
         AuthRole(String name) {
             this.name = name;
+        }
+
+        @Override
+        public String getAuthority() {
+            return this.name();
         }
     }
 

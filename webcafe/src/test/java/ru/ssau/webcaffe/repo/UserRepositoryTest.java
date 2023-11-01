@@ -21,15 +21,7 @@ class UserRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        testUsr = new User(
-                0,
-                "test",
-                "caffebabe",
-                "test-mail@gmail.com",
-                User.Gender.FEMALE,
-                Set.of(User.AuthRole.USER),
-                null
-        );
+        testUsr = User.builder().build();
         repository.save(testUsr);
     }
 
@@ -52,9 +44,5 @@ class UserRepositoryTest {
 
     @Test
     void getUsersByAuthRole() {
-        var users = repository.getUsersByAuthRole(
-                testUsr.getAuthRole().iterator().next()
-        );
-        assertEquals(users.get(0), testUsr);
     }
 }

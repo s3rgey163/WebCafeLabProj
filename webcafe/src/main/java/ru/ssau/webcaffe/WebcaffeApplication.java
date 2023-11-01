@@ -22,15 +22,13 @@ import java.util.TreeSet;
 public class WebcaffeApplication implements CommandLineRunner {
 
     @Autowired
-    EntityManager entityManager;
+    UserRepository userRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(WebcaffeApplication.class, args);
     }
     @Override
     public void run(String... args) throws Exception {
-        Query query = entityManager.createQuery("select day(cast(:d as localdatetime))");
-        query.setParameter("d", LocalDateTime.now());
-        System.out.println(query.getSingleResult());
+        System.out.println(userRepository.getByAuthRole(User.AuthRole.ADMIN));
     }
 }

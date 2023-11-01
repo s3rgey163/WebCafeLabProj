@@ -1,10 +1,12 @@
 package ru.ssau.webcaffe.util;
 
+import com.google.gson.Gson;
 import jakarta.jws.Oneway;
 import org.apache.logging.slf4j.SLF4JLoggerContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
@@ -73,6 +75,9 @@ public class Util {
         return original.stream()
                 .map(mapper)
                 .collect(newCollection, Collection::add, Collection::addAll);
+    }
+
+    public record Test(String name, String describe) implements Serializable {
     }
 
 

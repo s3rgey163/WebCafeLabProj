@@ -25,8 +25,6 @@ import java.util.Set;
 
     private Date birthday;
 
-    private UserPojo userPojo;
-
     private Set<AddressPojo> addressPojos;
 
     private Set<OrderPojo> orderPojos;
@@ -55,7 +53,7 @@ import java.util.Set;
                 secondName,
                 middleName,
                 (Date) birthday.clone(),
-                userPojo.toEntity(),
+                null,
                 addressPojos == null
                         ? null
                         : Util.collectionMapper(addressPojos, AddressPojo::toEntity, HashSet::new),
