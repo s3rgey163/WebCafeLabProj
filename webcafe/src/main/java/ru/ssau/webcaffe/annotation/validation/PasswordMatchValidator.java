@@ -1,6 +1,5 @@
 package ru.ssau.webcaffe.annotation.validation;
 
-import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import ru.ssau.webcaffe.payload.request.SignupRequest;

@@ -3,11 +3,13 @@ package ru.ssau.webcaffe.payload.request;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Value;
+import ru.ssau.webcaffe.annotation.validation.PasswordMatch;
 import ru.ssau.webcaffe.entity.User;
 
 import java.time.LocalDateTime;
 
 @Builder
+@PasswordMatch
 @Value public class SignupRequest {
     public static final String EMAIL_MATCH_PATTERN = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
