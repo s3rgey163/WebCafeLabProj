@@ -32,7 +32,7 @@ import java.util.Set;
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Customer customer;
 
     @ElementCollection(targetClass = AuthRole.class, fetch = FetchType.EAGER)

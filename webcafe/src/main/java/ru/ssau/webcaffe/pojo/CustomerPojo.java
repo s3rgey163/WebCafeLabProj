@@ -1,21 +1,22 @@
 package ru.ssau.webcaffe.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import ru.ssau.webcaffe.entity.Category;
 import ru.ssau.webcaffe.entity.Customer;
 import ru.ssau.webcaffe.entity.User;
 import ru.ssau.webcaffe.util.Util;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
+/**
+ * DTO for {@link Customer}
+ */
 @Builder
-@Data public class CustomerPojo {
+@Value
+public class CustomerPojo {
     private long id;
     private String name;
 
@@ -23,7 +24,7 @@ import java.util.Set;
 
     private String middleName;
 
-    private Date birthday;
+    private LocalDateTime birthday;
 
     private Set<AddressPojo> addressPojos;
 
@@ -35,7 +36,7 @@ import java.util.Set;
                 .name(customer.getName())
                 .secondName(customer.getSecondName())
                 .middleName(customer.getMiddleName())
-                .birthday((Date) customer.getBirthday().clone())
+                .birthday(customer.getBirthday())
                 .addressPojos(customer.getAddresses() == null
                         ? null
                         : Util.collectionMapper(customer.getAddresses(), AddressPojo::ofEntity, HashSet::new)
@@ -52,7 +53,7 @@ import java.util.Set;
                 name,
                 secondName,
                 middleName,
-                (Date) birthday.clone(),
+                birthday,
                 null,
                 addressPojos == null
                         ? null

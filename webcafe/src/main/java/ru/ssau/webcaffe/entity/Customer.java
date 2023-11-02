@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -26,7 +27,8 @@ import java.util.Set;
     @Column(name = "middle_name")
     private String middleName;
 
-    private Date birthday;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime birthday;
 
     @OneToOne
     @JoinColumn(name = User.PK_NAME, nullable = false)
