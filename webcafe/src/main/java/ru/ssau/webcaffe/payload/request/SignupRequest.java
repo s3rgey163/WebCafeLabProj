@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 
 @Builder
 @Value public class SignupRequest {
-
+    public static final String EMAIL_MATCH_PATTERN = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
     @NotBlank(message = "The username must be filled in")
     @Size(min = 5)
     String username;
 
-    @Email(message = "Should have email format")
+    @Email(message = "Should have email format", regexp = EMAIL_MATCH_PATTERN)
     @NotBlank(message = "The email must be filled in")
     String email;
 

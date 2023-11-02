@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ru.ssau.webcaffe.entity.*;
+import ru.ssau.webcaffe.payload.request.SignupRequest;
 import ru.ssau.webcaffe.repo.UserRepository;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @SpringBootApplication
