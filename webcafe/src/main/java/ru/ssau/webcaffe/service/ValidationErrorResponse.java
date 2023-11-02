@@ -22,7 +22,7 @@ public class ValidationErrorResponse {
         this.violations = violations;
     }
 
-    public static ValidationErrorResponse newValidationErrorResponse(
+    public static ValidationErrorResponse newFromBindings(
             BindingResult result
     ) {
         if(!result.hasErrors()) return new ValidationErrorResponse();
@@ -40,6 +40,12 @@ public class ValidationErrorResponse {
     public static class Violation implements Map.Entry<String, Object> {
         String fieldName;
         Object message;
+
+        public Violation(String fieldName, Object message) {
+            this.fieldName = fieldName;
+            this.message = message;
+        }
+
         @Override
         public String getKey() {
             return fieldName;
