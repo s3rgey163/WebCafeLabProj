@@ -33,7 +33,7 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
-    private JWTResponse authenticate(@Valid LoginRequest loginRequest) {
+    public JWTResponse authenticate(@Valid LoginRequest loginRequest) {
         Authentication authenticationRequest = UsernamePasswordAuthenticationToken
                 .unauthenticated(
                         loginRequest.getUsername(),
@@ -46,7 +46,7 @@ public class AuthService {
         return new JWTResponse(tokenProvider.generateToken(authenticationResponse), true);
     }
 
-    private MessageResponse register(@Valid SignupRequest signup) {
+    public MessageResponse register(@Valid SignupRequest signup) {
         var user = userService.createUser(signup);
         lg.debug("User registry: {}", user);
         return new MessageResponse("User register successfully");

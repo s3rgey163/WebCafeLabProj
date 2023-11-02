@@ -22,16 +22,8 @@ import java.util.regex.Pattern;
 
 
 @SpringBootApplication
-public class WebcaffeApplication implements CommandLineRunner {
-
-    @Autowired
-    UserRepository userRepository;
-
+public class WebcaffeApplication {
     public static void main(String[] args) {
         SpringApplication.run(WebcaffeApplication.class, args);
-    }
-    @Override
-    public void run(String... args) throws Exception {
-        System.out.println(userRepository.getByAuthRole(User.AuthRole.ADMIN));
     }
 }
