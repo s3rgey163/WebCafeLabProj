@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -48,15 +49,16 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain newSecurityFilterChain(HttpSecurity httpSecurity, MvcRequestMatcher.Builder mvc) throws Exception {
         return httpSecurity.cors(Customizer.withDefaults())
-                .exceptionHandling(exh -> exh.authenticationEntryPoint(jwtEntryPoint))
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(smc -> smc.sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS)
                 ).authorizeHttpRequests(amr -> amr
-                        .requestMatchers(
+/*                        .requestMatchers(
                                 mvc.pattern((String) SecurityAttributes.SIGN_UP_URLS.getValue())
-                        ).permitAll()
-                        .anyRequest().authenticated()
+                        ).permitAll()*/
+                        .anyRequest().permitAll()
                 )
+                .exceptionHandling(exh -> exh.authenticationEntryPoint(jwtEntryPoint))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

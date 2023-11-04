@@ -5,15 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import ru.ssau.webcaffe.pojo.UserPojo;
 import ru.ssau.webcaffe.util.SecretKeyFactory;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
-import java.util.Date;
-import java.util.Map;
 
 @Primary
 @Component("JWTHmac512TokenProvider")
@@ -23,7 +19,7 @@ public class JWTHmac512TokenProvider implements JWTTokenProvider {
     private final SecretKey accessKey;
 
     public JWTHmac512TokenProvider(@Value("${jwt.secret}") String accessKey) {
-        this.accessKey = SecretKeyFactory.hmacKeyOf(accessKey);
+        this.accessKey = (SecretKey) SecretKeyFactory.OfBase64(accessKey).key();
     }
 
     @Override

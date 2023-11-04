@@ -1,5 +1,6 @@
 package ru.ssau.webcaffe;
 
+import com.google.gson.Gson;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TemporalType;

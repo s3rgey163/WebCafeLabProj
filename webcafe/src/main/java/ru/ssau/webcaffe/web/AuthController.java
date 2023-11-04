@@ -27,12 +27,12 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseEntity<JWTResponse> authenticate(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.authenticate(loginRequest));
     }
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public ResponseEntity<MessageResponse> register(@RequestBody SignupRequest signupRequest) {
         return ResponseEntity.ok(authService.register(signupRequest));
     }
