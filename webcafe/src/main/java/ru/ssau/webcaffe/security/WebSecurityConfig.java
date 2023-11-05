@@ -53,10 +53,10 @@ public class WebSecurityConfig {
                 .sessionManagement(smc -> smc.sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS)
                 ).authorizeHttpRequests(amr -> amr
-/*                        .requestMatchers(
+                        .requestMatchers(
                                 mvc.pattern((String) SecurityAttributes.SIGN_UP_URLS.getValue())
-                        ).permitAll()*/
-                        .anyRequest().permitAll()
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .exceptionHandling(exh -> exh.authenticationEntryPoint(jwtEntryPoint))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

@@ -34,7 +34,7 @@ public class OrderPojo {
                 order.getCommentary(),
                 order.getPositions() == null
                         ? null
-                        : Util.collectionMapper(
+                        : Util.mapPersistenceCollection(
                         order.getPositions(),
                         OrderPositionPojo::ofEntity,
                         HashSet::new
@@ -48,7 +48,7 @@ public class OrderPojo {
                 null,
                 positionPojos == null
                         ? null
-                        : Util.collectionMapper(
+                        : Util.mapPersistenceCollection(
                             positionPojos,
                             OrderPositionPojo::toEntity,
                             HashSet::new

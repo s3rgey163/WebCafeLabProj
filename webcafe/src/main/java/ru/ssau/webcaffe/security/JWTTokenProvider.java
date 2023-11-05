@@ -25,8 +25,8 @@ public interface JWTTokenProvider {
         UserPojo user = (UserPojo) authentication.getPrincipal();
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + (long) SecurityAttributes.EXPIRATION_TIME.getValue());
-        Map<String, String> claims = Map.of(
-                "id", String.valueOf(user.getId()),
+        Map<String, ?> claims = Map.of(
+                "id", user.getId(),
                 "username", user.getUsername(),
                 "email", user.getEmail(),
                 "firstname", user.getCustomer().getName(),

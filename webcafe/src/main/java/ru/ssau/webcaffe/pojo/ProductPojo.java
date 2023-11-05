@@ -7,13 +7,16 @@ import lombok.NoArgsConstructor;
 import ru.ssau.webcaffe.entity.Category;
 import ru.ssau.webcaffe.entity.Product;
 import ru.ssau.webcaffe.entity.ProductType;
+import ru.ssau.webcaffe.util.Util;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data public class ProductPojo {
+@Data
+public class ProductPojo {
     private long id;
 
     private String name;
@@ -24,9 +27,13 @@ import java.util.stream.Collectors;
         return new ProductPojo(
                 product.getId(),
                 product.getName(),
-                product.getTypes().stream()
-                        .map(ProductTypePojo::ofEntity)
-                        .collect(Collectors.toSet())
+                product.getTypes() == null
+                        ? null
+                        : Util.mapPersistenceCollection(
+                        product.getTypes(),
+                        ProductTypePojo::ofEntity,
+                        HashSet::new
+                )
         );
     }
 
@@ -36,9 +43,13 @@ import java.util.stream.Collectors;
                 id,
                 name,
                 null,
-                types.stream()
-                        .map(ProductTypePojo::toEntity)
-                        .collect(Collectors.toSet())
+                types == null
+                        ? null
+                        : Util.mapPersistenceCollection(
+                        types,
+                        ProductTypePojo::toEntity,
+                        HashSet::new
+                )
         );
     }
 }

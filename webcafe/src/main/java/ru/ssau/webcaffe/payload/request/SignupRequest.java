@@ -9,7 +9,7 @@ import ru.ssau.webcaffe.entity.User;
 import java.time.LocalDateTime;
 
 @Builder
-@PasswordMatch
+@PasswordMatch(message = "Passwords doesn't match")
 @Value public class SignupRequest {
     public static final String EMAIL_MATCH_PATTERN = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 

@@ -34,14 +34,14 @@ import java.util.Set;
     public static PromotionPojo ofEntity(Promotion promotion) {
         var productTypePojos = promotion.getProductTypes() == null
                 ? null
-                : Util.collectionMapper(
+                : Util.mapCollection(
                     promotion.getProductTypes(),
                     ProductTypePojo::ofEntity,
                     HashSet::new
                 );
         var conditionProductTypePojos = promotion.getConditionProductTypes() == null
                 ? null
-                : Util.collectionMapper(
+                : Util.mapPersistenceCollection(
                     promotion.getConditionProductTypes(),
                     ProductTypePojo::ofEntity,
                     HashSet::new
@@ -60,14 +60,14 @@ import java.util.Set;
     public Promotion toEntity() {
         var productTypes = productTypePojos == null
                 ? null
-                : Util.collectionMapper(
+                : Util.mapPersistenceCollection(
                 productTypePojos,
                 ProductTypePojo::toEntity,
                 HashSet::new
         );
         var conditionProductType = conditionProductTypePojos == null
                 ? null
-                : Util.collectionMapper(
+                : Util.mapPersistenceCollection(
                 conditionProductTypePojos,
                 ProductTypePojo::toEntity,
                 HashSet::new

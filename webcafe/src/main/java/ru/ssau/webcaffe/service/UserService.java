@@ -42,7 +42,9 @@ public class UserService {
                 .withAuthRole(Set.of(User.AuthRole.USER)).build();
         lg.debug("Save user: {}", user);
         try {
-            userRepository.save(user.toEntity());
+            User userEntity = user.toEntity();
+            userEntity.getCustomer().setUser(userEntity);
+            userRepository.save(userEntity);
         } catch (Exception ex) {
             lg.warn("Unable to save user[login: {}, email: {}]. Cause: ",
                     user.getLogin(),

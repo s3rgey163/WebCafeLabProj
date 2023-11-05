@@ -1,13 +1,10 @@
 package ru.ssau.webcaffe.pojo;
 
 import lombok.*;
-import ru.ssau.webcaffe.entity.Category;
 import ru.ssau.webcaffe.entity.Customer;
-import ru.ssau.webcaffe.entity.User;
 import ru.ssau.webcaffe.util.Util;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,11 +36,11 @@ public class CustomerPojo {
                 .birthday(customer.getBirthday())
                 .addressPojos(customer.getAddresses() == null
                         ? null
-                        : Util.collectionMapper(customer.getAddresses(), AddressPojo::ofEntity, HashSet::new)
+                        : Util.mapPersistenceCollection(customer.getAddresses(), AddressPojo::ofEntity, HashSet::new)
                 )
                 .orderPojos(customer.getOrders() == null
                         ? null
-                        : Util.collectionMapper(customer.getOrders(), OrderPojo::ofEntity, HashSet::new)
+                        : Util.mapPersistenceCollection(customer.getOrders(), OrderPojo::ofEntity, HashSet::new)
                 ).build();
     }
 
@@ -57,10 +54,10 @@ public class CustomerPojo {
                 null,
                 addressPojos == null
                         ? null
-                        : Util.collectionMapper(addressPojos, AddressPojo::toEntity, HashSet::new),
+                        : Util.mapPersistenceCollection(addressPojos, AddressPojo::toEntity, HashSet::new),
                 orderPojos == null
                         ? null
-                        : Util.collectionMapper(orderPojos, OrderPojo::toEntity, HashSet::new)
+                        : Util.mapPersistenceCollection(orderPojos, OrderPojo::toEntity, HashSet::new)
         );
     }
 }
