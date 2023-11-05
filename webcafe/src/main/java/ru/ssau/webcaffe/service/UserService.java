@@ -18,6 +18,8 @@ import java.util.Set;
 public class UserService {
     public static final Logger lg = LoggerFactory.getLogger(UserService.class);
 
+    public static final Set<User.AuthRole> DEFAULT_ROLES = Set.of(User.AuthRole.USER);
+
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder pswdEncoder;
 
@@ -39,7 +41,7 @@ public class UserService {
                 .withGender(signupRequest.getGender())
                 .withPassword(pswdEncoder.encode(signupRequest.getPassword()))
                 .withCustomer(customer)
-                .withAuthRole(Set.of(User.AuthRole.USER)).build();
+                .withAuthRole(DEFAULT_ROLES).build();
         lg.debug("Save user: {}", user);
         try {
             User userEntity = user.toEntity();
