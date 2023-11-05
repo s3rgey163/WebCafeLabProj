@@ -1,6 +1,7 @@
 package ru.ssau.webcaffe.service;
 
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Service
+@Getter
 public class ValidationErrorResponse {
 
     private final Map<String, ?> violations;

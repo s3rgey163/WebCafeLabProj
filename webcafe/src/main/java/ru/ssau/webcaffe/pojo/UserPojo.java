@@ -29,7 +29,8 @@ public class UserPojo implements UserDetails  {
 
     private Set<User.AuthRole> authRole;
 
-    private LocalDateTime created;
+    @Builder.Default
+    private LocalDateTime created = LocalDateTime.now();
 
     private CustomerPojo customer;
 

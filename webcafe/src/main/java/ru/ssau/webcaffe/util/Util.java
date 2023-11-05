@@ -5,6 +5,7 @@ import jakarta.jws.Oneway;
 import org.apache.logging.slf4j.SLF4JLoggerContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.ssau.webcaffe.pojo.UserPojo;
 import ru.ssau.webcaffe.security.JWTHmac512TokenProvider;
 import ru.ssau.webcaffe.security.JWTTokenProvider;
 
@@ -81,12 +82,7 @@ public class Util {
     }
 
     public static void main(String[] args) {
-        JWTTokenProvider provider = new JWTHmac512TokenProvider(
-                "gBJCELhyYqrqnLy8QQO1D1kbW15+AXIaV0yqJ" +
-                        "y/8qZj4MgroS+CalZBoZaB4AsdQOZ1pAUC8YzyKOd2sKnjIMg=="
-        );
-        System.out.println(new KeyHolder(provider.getAccessKey()).toBase64());
-        System.exit(0);
+        System.out.println(UserPojo.builder().withId(1).build());
         var l1 = new Object() {
             private Set<Integer> ints = Set.of(1,2,3,4,5,6);
             private String name = "Hello world";

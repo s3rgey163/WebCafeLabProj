@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import ru.ssau.webcaffe.payload.request.LoginRequest;
 import ru.ssau.webcaffe.payload.request.SignupRequest;
 import ru.ssau.webcaffe.payload.responce.JWTResponse;
@@ -15,6 +16,7 @@ import ru.ssau.webcaffe.payload.responce.MessageResponse;
 import ru.ssau.webcaffe.security.JWTTokenProvider;
 
 @Service
+@Validated
 public class AuthService {
     public static final Logger lg = LoggerFactory.getLogger(AuthService.class);
     private final UserService userService;

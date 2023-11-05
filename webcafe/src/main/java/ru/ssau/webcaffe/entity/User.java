@@ -49,7 +49,8 @@ import java.util.Set;
             updatable = false
     )
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
-    private LocalDateTime created;
+    @Builder.Default
+    private LocalDateTime created = LocalDateTime.now();
 
     @Getter
     public enum Gender {
