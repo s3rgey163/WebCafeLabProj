@@ -3,8 +3,10 @@ package ru.ssau.webcaffe.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ssau.webcaffe.entity.User;
 import ru.ssau.webcaffe.exception.UserPersistanceException;
 import ru.ssau.webcaffe.payload.request.SignupRequest;
@@ -12,6 +14,7 @@ import ru.ssau.webcaffe.pojo.CustomerPojo;
 import ru.ssau.webcaffe.pojo.UserPojo;
 import ru.ssau.webcaffe.repo.UserRepository;
 
+import java.security.Principal;
 import java.util.Set;
 
 @Service
@@ -59,5 +62,22 @@ public class UserService {
             );
         }
         return user;
+    }
+
+    public UserPojo update(UserPojo newUser, Principal newUserPrincipal) {
+        UserPojo oldUser = getUserByPrincipal(newUserPrincipal);
+        oldUser.setCustomer(newUser.getCustomer());
+        oldUser.setGender(newUser.getGender());
+
+        userRepository.save(oldUser.toEntity());
+        return oldUser;
+    }
+
+    public UserPojo getUserByPrincipal(Principal principal) {
+        User user = userRepository.getUserByEmail(principal.getName())
+                .orElseThrow(() ->
+                        new UserPersistanceException("Unable find user with name: " + principal.getName())
+                );
+        return UserPojo.ofEntity(user);
     }
 }
