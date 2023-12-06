@@ -1,5 +1,7 @@
 package ru.ssau.webcaffe.service;
 
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 import ru.ssau.webcaffe.entity.Category;
 import ru.ssau.webcaffe.entity.Product;
 import ru.ssau.webcaffe.pojo.ProductPojo;
@@ -10,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+@Service
+@Primary
 public class DefaultProductService {
     private ProductRepository productRepository;
 
