@@ -49,7 +49,7 @@ public class AuthService {
     }
 
     public MessageResponse register(@Valid SignupRequest signup) {
-        var user = userService.createUser(signup);
+        var user = userService.saveUser(signup);
         lg.debug("User registry: {}", user);
         return new MessageResponse("User register successfully");
     }

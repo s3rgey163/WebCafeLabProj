@@ -3,10 +3,8 @@ package ru.ssau.webcaffe.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.ssau.webcaffe.entity.User;
 import ru.ssau.webcaffe.exception.UserPersistanceException;
 import ru.ssau.webcaffe.payload.request.SignupRequest;
@@ -45,6 +43,11 @@ public class UserService {
                 .withPassword(pswdEncoder.encode(signupRequest.getPassword()))
                 .withCustomer(customer)
                 .withAuthRole(DEFAULT_ROLES).build();
+        return user;
+    }
+
+    public UserPojo saveUser(SignupRequest signupRequest) {
+        var user = createUser(signupRequest);
         lg.debug("Save user: {}", user);
         try {
             User userEntity = user.toEntity();
