@@ -34,6 +34,7 @@ public class DefaultAddressService implements AddressService {
         return Util.mapCollection(addresses, AddressPojo::ofEntity, HashSet::new);
     }
 
+    @Override
     public Set<AddressPojo> getAddressesByUserId(long userId) {
         Set<Address> addresses = addressRepository.getAddressesByUserId(userId);
         return Util.mapCollection(addresses, AddressPojo::ofEntity, HashSet::new);

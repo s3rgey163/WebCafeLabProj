@@ -12,10 +12,11 @@ import java.util.Optional;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query("from Customer c join c.user where c.user.id = :userId")
     Optional<Customer> getCustomerByUserId(Long userId);
-    @Query("from Customer where name = :firstName and secondName = :secondName and middleName = :middleName")
+    @Query("from Customer c " +
+            "where c.name = :firstName " +
+            "   and c.secondName = :secondName " +
+            "   and c.middleName = :middleName")
     Optional<Customer> getCustomerByFullName(String firstName, String secondName, String middleName);
 
     Optional<Customer> getCustomerByUser(User user);
-
-
 }
