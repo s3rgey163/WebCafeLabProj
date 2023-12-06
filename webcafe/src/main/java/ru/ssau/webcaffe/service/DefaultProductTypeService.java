@@ -2,10 +2,13 @@ package ru.ssau.webcaffe.service;
 
 import ru.ssau.webcaffe.repo.ProductTypeRepository;
 
-public class ProductTypeService {
+public class DefaultProductTypeService {
     private ProductTypeRepository productTypeRepository;
 
-    public ProductTypeService(ProductTypeRepository productTypeRepository) {
+    public DefaultProductTypeService(ProductTypeRepository productTypeRepository) {
         this.productTypeRepository = productTypeRepository;
     }
+
+
+
 }

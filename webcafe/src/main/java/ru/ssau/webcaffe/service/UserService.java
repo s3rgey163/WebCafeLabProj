@@ -64,8 +64,8 @@ public class UserService {
         return user;
     }
 
-    public UserPojo update(UserPojo newUser, Principal newUserPrincipal) {
-        UserPojo oldUser = getUserByPrincipal(newUserPrincipal);
+    public UserPojo update(UserPojo newUser, Principal oldUserPrincipal) {
+        UserPojo oldUser = getUserByPrincipal(oldUserPrincipal);
         oldUser.setCustomer(newUser.getCustomer());
         oldUser.setGender(newUser.getGender());
 
