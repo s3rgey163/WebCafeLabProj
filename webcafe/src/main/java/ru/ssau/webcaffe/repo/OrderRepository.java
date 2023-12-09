@@ -19,27 +19,41 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             + " order by o.dateTime";
     String FIND_BY_DAY_OF_MONTH_DESC_QUERY = FIND_BY_DATA_OF_MONTH_QUERY
             + " order by o.dateTime desc";
-    List<Order> getByCustomerAndDateTimeBetweenOrderByDateTime(
+    default List<Order> getByCustomerAndDateTimeBetweenOrderByDateTime(
             Customer customer,
             LocalDateTime when,
             LocalDateTime until
-    );
+    ) {
+        return getByCustomerIdAndDateTimeBetweenOrderByDateTime(
+                customer.getId(),
+                when,
+                until
+        );
+    }
     List<Order> getByCustomerIdAndDateTimeBetweenOrderByDateTime(
             long customerId,
             LocalDateTime when,
             LocalDateTime until
     );
-    List<Order> getByCustomerAndDateTimeBetweenOrderByDateTimeDesc(
+    default List<Order> getByCustomerAndDateTimeBetweenOrderByDateTimeDesc(
             Customer customer,
             LocalDateTime when,
             LocalDateTime until
-    );
+    ) {
+        return getByCustomerIdAndDateTimeBetweenOrderByDateTimeDesc(
+                customer.getId(),
+                when,
+                until
+        );
+    }
     List<Order> getByCustomerIdAndDateTimeBetweenOrderByDateTimeDesc(
             long customerId,
             LocalDateTime when,
             LocalDateTime until
     );
-    List<Order> getByCustomerOrderByDateTime(Customer customer);
+    default List<Order> getByCustomerOrderByDateTime(Customer customer) {
+        return getByCustomerIdOrderByDateTime(customer.getId());
+    }
     List<Order> getByCustomerIdOrderByDateTime(long id);
     @Query(FIND_BY_DAY_OF_MONTH_ASC_QUERY)
     List<Order> getByDateOrderByDate(int year, int month, int day);
@@ -47,6 +61,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> getByDateOrderByDateDesc(int year, int month, int day);
     List<Order> getByDateTimeBetweenOrderByDateTime(LocalDateTime when, LocalDateTime until);
     List<Order> getByDateTimeBetweenOrderByDateTimeDesc(LocalDateTime when, LocalDateTime until);
+
+    default List<Order> getByCustomerOrderByDateTimeDesc(Customer customer) {
+        return getByCustomerIdOrderByDateTimeDesc(customer.getId());
+    }
+
     List<Order> getByCustomerIdOrderByDateTimeDesc(long customerId);
-    List<Order> getByCustomerOrderByDateTimeDesc(Customer customer);
 }
