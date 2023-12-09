@@ -36,14 +36,13 @@ public class UserService {
                 .secondName(signupRequest.getSecondname())
                 .middleName(signupRequest.getMiddlename())
                 .birthday(signupRequest.getBirthday()).build();
-        var user = UserPojo.builder()
+        return UserPojo.builder()
                 .withLogin(signupRequest.getUsername())
                 .withEmail(signupRequest.getEmail())
                 .withGender(signupRequest.getGender())
                 .withPassword(pswdEncoder.encode(signupRequest.getPassword()))
                 .withCustomer(customer)
                 .withAuthRole(DEFAULT_ROLES).build();
-        return user;
     }
 
     public UserPojo saveUser(SignupRequest signupRequest) {
