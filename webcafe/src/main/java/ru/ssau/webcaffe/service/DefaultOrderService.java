@@ -17,6 +17,8 @@ import java.util.List;
 public class DefaultOrderService {
     private OrderRepository orderRepository;
 
+    private UserService userService;
+
     public DefaultOrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }

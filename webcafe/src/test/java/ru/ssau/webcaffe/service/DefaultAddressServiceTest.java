@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import ru.ssau.webcaffe.WebcaffeApplication;
-import ru.ssau.webcaffe.entity.User;
-import ru.ssau.webcaffe.pojo.UserPojo;
 
 import java.security.Principal;
 

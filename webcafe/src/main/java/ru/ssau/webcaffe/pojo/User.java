@@ -1,13 +1,10 @@
 package ru.ssau.webcaffe.pojo;
 
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Transient;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.ssau.webcaffe.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -16,7 +13,7 @@ import java.util.Set;
 
 @Builder(setterPrefix = "with")
 @Data
-public class UserPojo implements UserDetails  {
+public class User implements UserDetails  {
     private long id;
 
     private String login;
@@ -25,9 +22,9 @@ public class UserPojo implements UserDetails  {
 
     private String email;
 
-    private User.Gender gender;
+    private ru.ssau.webcaffe.entity.User.Gender gender;
 
-    private Set<User.AuthRole> authRole;
+    private Set<ru.ssau.webcaffe.entity.User.AuthRole> authRole;
 
     @Builder.Default
     private LocalDateTime created = LocalDateTime.now();
@@ -64,15 +61,15 @@ public class UserPojo implements UserDetails  {
         return true;
     }
 
-    private static List<? extends GrantedAuthority> getAuthoritiesByUserRoles(Set<User.AuthRole> roles) {
+    private static List<? extends GrantedAuthority> getAuthoritiesByUserRoles(Set<ru.ssau.webcaffe.entity.User.AuthRole> roles) {
         return roles.stream()
-                .map(User.AuthRole::name)
+                .map(ru.ssau.webcaffe.entity.User.AuthRole::name)
                 .map(SimpleGrantedAuthority::new)
                 .toList();
     }
 
-    public static UserPojo ofEntity(User user) {
-        return UserPojo.builder()
+    public static User ofEntity(ru.ssau.webcaffe.entity.User user) {
+        return User.builder()
                 .withId(user.getId())
                 .withLogin(user.getLogin())
                 .withPassword(user.getPassword())
@@ -85,8 +82,8 @@ public class UserPojo implements UserDetails  {
 
     }
 
-    public User toEntity() {
-        return User.builder()
+    public ru.ssau.webcaffe.entity.User toEntity() {
+        return ru.ssau.webcaffe.entity.User.builder()
                 .withId(id)
                 .withLogin(login)
                 .withPassword(password)

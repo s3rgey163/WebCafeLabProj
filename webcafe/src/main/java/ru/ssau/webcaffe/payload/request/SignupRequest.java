@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Value;
 import ru.ssau.webcaffe.annotation.validation.PasswordMatch;
 import ru.ssau.webcaffe.entity.User;
+import ru.ssau.webcaffe.pojo.AddressPojo;
 
 import java.time.LocalDateTime;
 
