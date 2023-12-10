@@ -1,13 +1,19 @@
 package ru.ssau.webcaffe.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = Category.TABLE_NAME)
-@Data public class Category {
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+public class Category {
     public static final String TABLE_NAME = "product_category";
     public static final String REFERENCE_PK_NAME = TABLE_NAME + "_id";
     @Id
@@ -25,6 +31,7 @@ import java.util.Set;
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL
     )
+    @ToString.Exclude
     private Set<Product> products;
 
     public Category() {}
@@ -60,5 +67,21 @@ import java.util.Set;
     public void setProducts(Set<Product> products) {
         this.products = products;
         this.products.forEach(p ->  p.setCategory(this));
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Category category = (Category) o;
+        return Objects.equals(getId(), category.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

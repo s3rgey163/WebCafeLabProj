@@ -1,20 +1,22 @@
 package ru.ssau.webcaffe.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table
 @AllArgsConstructor
 @NoArgsConstructor
-@Data public class Customer {
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
@@ -35,6 +37,7 @@ import java.util.Set;
     private User user;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Set<Address> addresses;
 
     @OneToMany(
@@ -42,5 +45,22 @@ import java.util.Set;
             mappedBy = "customer",
             cascade = CascadeType.ALL
     )
+    @ToString.Exclude
     private Set<Order> orders;
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Customer customer = (Customer) o;
+        return Objects.equals(getId(), customer.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
 }

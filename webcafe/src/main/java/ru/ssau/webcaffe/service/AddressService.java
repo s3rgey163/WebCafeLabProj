@@ -19,6 +19,11 @@ public interface AddressService {
     void save(Principal principal, AddressPojo address);
     void save(UserPojo userPojo, AddressPojo address);
 
+    void save(long userId, Collection<AddressPojo> address);
+
+    void save(Principal principal, Collection<AddressPojo> address);
+    void save(UserPojo userPojo, Collection<AddressPojo> address);
+
     void save(AddressPojo addressPojo);
 
     void save(Collection<AddressPojo> addressPojos);

@@ -78,6 +78,21 @@ public class DefaultAddressService implements AddressService {
     }
 
     @Override
+    public void save(long userId, Collection<AddressPojo> address) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void save(Principal principal, Collection<AddressPojo> address) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void save(UserPojo userPojo, Collection<AddressPojo> address) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void save(AddressPojo addressPojo) {
         addressRepository.save(addressPojo.toEntity());
     }

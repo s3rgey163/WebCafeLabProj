@@ -4,10 +4,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ru.ssau.webcaffe.pojo.AddressPojo;
+import ru.ssau.webcaffe.pojo.OrderPojo;
 import ru.ssau.webcaffe.service.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 
 @SpringBootApplication
@@ -52,19 +54,20 @@ public class WebcaffeApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         AddressPojo addr = new AddressPojo(0, "Самара", "Ново-Садовая", 112);
+        OrderPojo order = new OrderPojo(
+                0,
+                LocalDateTime.now(),
+                null,
+                "Побыстрее",
+                Collections.emptySet()
+        );
         var principal = new Principal() {
             @Override
             public String getName() {
                 return "sergeyknyz75@gmail.com";
             }
         };
-        customerService.updateFullNameAndBirthday(
-                1,
-                "Александр",
-                "Сидоров",
-                "Сергеевич",
-                LocalDateTime.now()
-        );
+        orderService.save(1, 1, order);
 //        addressService.saveAddress(new Principal() {
 //            @Override
 //            public String getName() {

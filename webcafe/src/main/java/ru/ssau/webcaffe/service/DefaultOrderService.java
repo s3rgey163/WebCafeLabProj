@@ -3,13 +3,13 @@ package ru.ssau.webcaffe.service;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ru.ssau.webcaffe.entity.Order;
+import ru.ssau.webcaffe.pojo.CustomerPojo;
 import ru.ssau.webcaffe.pojo.OrderPojo;
 import ru.ssau.webcaffe.repo.OrderRepository;
 import ru.ssau.webcaffe.util.Util;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -17,10 +17,14 @@ import java.util.List;
 public class DefaultOrderService {
     private OrderRepository orderRepository;
 
-    private UserService userService;
+    private DefaultCustomerService customerService;
 
-    public DefaultOrderService(OrderRepository orderRepository) {
+    public DefaultOrderService(
+            OrderRepository orderRepository,
+            DefaultCustomerService customerService
+    ) {
         this.orderRepository = orderRepository;
+        this.customerService = customerService;
     }
 
     private List<OrderPojo> mapToOrderPojoCollection(List<Order> orders) {
@@ -80,5 +84,15 @@ public class DefaultOrderService {
     public List<OrderPojo> getByCustomerIdOrderByDateTimeDesc(long customerId) {
         var orders = orderRepository.getByCustomerIdOrderByDateTimeDesc(customerId);
         return mapToOrderPojoCollection(orders);
+    }
+
+    public void save(long userId, long customerId, OrderPojo orderPojo) {
+        CustomerPojo customerPojo = customerService.getByCustomerId(customerId);
+        customerPojo.getOrderPojos().add(orderPojo);
+        customerService.save(userId, customerPojo);
+    }
+
+    public void deleteByOrderIdAndCustomerId(long customerId, long orderId) {
+        orderRepository.deleteByIdAndCustomerId(orderId, customerId);
     }
 }

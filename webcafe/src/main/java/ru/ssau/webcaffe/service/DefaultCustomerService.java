@@ -69,11 +69,8 @@ public class DefaultCustomerService {
         addressService.save(customerPojo.getAddressPojos());
         Customer customer = customerPojo.toEntity();
         customer.setUser(userPojo.toEntity());
+        customer.getOrders().forEach(order -> order.setCustomer(customer));
         customerRepository.save(customer);
-    }
-
-    public void save(CustomerPojo customerPojo) {
-        customerRepository.save(customerPojo.toEntity());
     }
 
     public void updateFullNameAndBirthday(

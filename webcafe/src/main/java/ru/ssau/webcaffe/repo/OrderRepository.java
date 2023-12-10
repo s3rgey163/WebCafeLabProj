@@ -67,4 +67,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     }
 
     List<Order> getByCustomerIdOrderByDateTimeDesc(long customerId);
+
+    void deleteByIdAndCustomerId(long id, long customerId);
 }

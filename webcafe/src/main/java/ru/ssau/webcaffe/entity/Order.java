@@ -2,18 +2,22 @@ package ru.ssau.webcaffe.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "customer_order")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data public class Order {
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
@@ -27,6 +31,7 @@ import java.util.Set;
             cascade = CascadeType.ALL
     )
     @Column(nullable = false)
+    @ToString.Exclude
     private Set<OrderPosition> positions;
 
     @ManyToOne
@@ -38,4 +43,20 @@ import java.util.Set;
     private LocalDateTime dateTime;
 
     private String commentary;
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Order order = (Order) o;
+        return Objects.equals(getId(), order.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
 }
