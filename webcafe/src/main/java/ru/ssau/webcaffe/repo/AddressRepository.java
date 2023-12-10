@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ssau.webcaffe.entity.Address;
 
+import java.util.Collection;
 import java.util.Set;
 
 @Repository
@@ -23,12 +24,12 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 
     @Modifying
     @Query(nativeQuery = true, value = "delete from customer_addresses where addresses_id = ?2 and customer_id = ?1")
-    void deleteAddressFromCustomer(long customerId, long addressId);
+    void deleteAddressesFromCustomer(long customerId, long addressId);
 
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value = "delete from customer_addresses where customer_id = ?1")
-    void deleteAllFromCustomerId(long customerId);
+    void deleteAllAddressesFromCustomer(long customerId);
 
     @Query("select count(*) from Customer c join c.addresses a where a.id = :id")
     long getCountByAddressId(@NonNull long id);

@@ -18,7 +18,6 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 public class User {
     public static final String TABLE_NAME = "cff_user";
     public static final String PK_NAME = TABLE_NAME + "_id";

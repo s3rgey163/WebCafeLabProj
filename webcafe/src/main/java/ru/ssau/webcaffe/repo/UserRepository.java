@@ -14,6 +14,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> getUsersById(long id);
+
+    @Query("select u.id from User u where u.email = :email")
+    long getUserIdByEmail(String email);
     Optional<User> getUserByLogin(String login);
 
     Optional<User> getUserByEmail(String email);

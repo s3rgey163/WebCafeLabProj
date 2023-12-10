@@ -30,9 +30,11 @@ public interface AddressService {
 
     void delete(long customerId, long addressId);
 
-    void deleteAllByCustomerId(long customerId);
+    void delete(long customerId, Collection<AddressPojo> addressPojos);
 
-    void deleteAllByCustomer(CustomerPojo customerId);
+    void deleteAllFromCustomer(long customerId);
+
+    void deleteAllFromCustomer(CustomerPojo customerId);
 
     void update(long addressId, AddressPojo newAddress);
 

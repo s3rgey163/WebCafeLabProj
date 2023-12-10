@@ -14,7 +14,6 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

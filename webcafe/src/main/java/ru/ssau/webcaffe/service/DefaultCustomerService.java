@@ -4,14 +4,22 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ssau.webcaffe.entity.Customer;
+import ru.ssau.webcaffe.entity.Order;
 import ru.ssau.webcaffe.entity.User;
 import ru.ssau.webcaffe.exception.EntityPersistenceException;
 import ru.ssau.webcaffe.pojo.CustomerPojo;
+import ru.ssau.webcaffe.pojo.OrderPojo;
 import ru.ssau.webcaffe.pojo.UserPojo;
+import ru.ssau.webcaffe.repo.AddressRepository;
 import ru.ssau.webcaffe.repo.CustomerRepository;
+import ru.ssau.webcaffe.util.Util;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 @Service
 @Primary
@@ -22,14 +30,17 @@ public class DefaultCustomerService {
 
     private final AddressService addressService;
 
-    public DefaultCustomerService(
-            CustomerRepository customerRepository,
-            UserService userService,
-            AddressService addressService
-    ) {
+    private final AddressRepository addressRepository;
+
+    private final DefaultOrderService orderService;
+
+
+    public DefaultCustomerService(CustomerRepository customerRepository, UserService userService, AddressService addressService, AddressRepository addressRepository, DefaultOrderService orderService) {
         this.customerRepository = customerRepository;
         this.userService = userService;
         this.addressService = addressService;
+        this.addressRepository = addressRepository;
+        this.orderService = orderService;
     }
 
     public CustomerPojo getByUserId(long userId) {
@@ -61,15 +72,25 @@ public class DefaultCustomerService {
     }
 
     public CustomerPojo getByPrincipal(Principal principal) {
-        return userService.getUserByPrincipal(principal).getCustomer();
+        return userService.getUserByPrincipal(principal, false).getCustomer();
     }
 
+    @Transactional
     public void save(long userId, CustomerPojo customerPojo) {
-        UserPojo userPojo = userService.getUserById(userId);
-        addressService.save(customerPojo.getAddressPojos());
+        UserPojo userPojo = userService.getUserById(userId, true);
+        CustomerPojo currentCustomerPojo = userPojo.getCustomer();
+        if(currentCustomerPojo != null && !currentCustomerPojo.equals(customerPojo)) {
+            addressService.deleteAllFromCustomer(currentCustomerPojo);
+            customerRepository.deleteById(currentCustomerPojo.getId());
+        }
         Customer customer = customerPojo.toEntity();
         customer.setUser(userPojo.toEntity());
-        customer.getOrders().forEach(order -> order.setCustomer(customer));
+        if(customer.getOrders() != null) {
+            customer.getOrders().forEach(order -> order.setCustomer(customer));
+        }
+        if(customer.getAddresses() != null) {
+            addressRepository.saveAll(customer.getAddresses());
+        }
         customerRepository.save(customer);
     }
 
@@ -87,6 +108,19 @@ public class DefaultCustomerService {
                 middlename,
                 birthday
         );
+    }
+
+    public void updateOrders(long customerId, Collection<OrderPojo> orders) {
+        customerRepository.updateOrders(
+                customerId,
+                Util.mapCollection(orders, OrderPojo::toEntity, HashSet::new)
+        );
+    }
+
+    public void addOrders(long customerId, OrderPojo... orders) {
+        var currentOrders = orderService.getByCustomerIdOrderByDateTimeDesc(customerId);
+        currentOrders.addAll(Arrays.stream(orders).toList());
+        updateOrders(customerId, currentOrders);
     }
 
     public void deleteByCustomerId(long customerId) {

@@ -3,13 +3,17 @@ package ru.ssau.webcaffe.repo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ssau.webcaffe.entity.Customer;
+import ru.ssau.webcaffe.entity.Order;
 import ru.ssau.webcaffe.entity.User;
-
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
@@ -23,6 +27,14 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> getCustomerByUser(User user);
 
+    @Query("select c.id from Customer c where c.user.id = :userId")
+    long getCustomerIdByUserId(long userId);
+
+    @Transactional
+    @Modifying
+    @Query("update Customer c set c.orders = :orders where c.id = :id")
+    void updateOrders(long id, Set<Order> orders);
+
     @Transactional
     @Modifying
     @Query("update Customer c set c.name = :name, c.secondName = :secondName, c.middleName = :middleName, c.birthday = :birthday where c.id = :id")
@@ -33,4 +45,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             String middleName,
             LocalDateTime birthday
     );
+
+    @Modifying
+    @Query("delete from Customer c where c.id = :id")
+    void deleteById(long id);
 }

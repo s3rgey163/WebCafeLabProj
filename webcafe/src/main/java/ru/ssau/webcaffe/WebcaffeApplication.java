@@ -1,15 +1,20 @@
 package ru.ssau.webcaffe;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ru.ssau.webcaffe.pojo.AddressPojo;
-import ru.ssau.webcaffe.pojo.OrderPojo;
+import ru.ssau.webcaffe.pojo.*;
+import ru.ssau.webcaffe.repo.AddressRepository;
 import ru.ssau.webcaffe.service.*;
+import ru.ssau.webcaffe.util.Util;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 
 @SpringBootApplication
@@ -27,6 +32,9 @@ public class WebcaffeApplication implements CommandLineRunner {
     private final DefaultPromotionService promotionService;
 
     private final UserService userService;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     public WebcaffeApplication(
             AddressService addressService,
@@ -53,7 +61,7 @@ public class WebcaffeApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        AddressPojo addr = new AddressPojo(0, "Самара", "Ново-Садовая", 112);
+        AddressPojo addr = new AddressPojo(0, "Самара", "ул. Свободы, д. 16", 8);
         OrderPojo order = new OrderPojo(
                 0,
                 LocalDateTime.now(),
@@ -67,7 +75,22 @@ public class WebcaffeApplication implements CommandLineRunner {
                 return "sergeyknyz75@gmail.com";
             }
         };
-        orderService.save(1, 1, order);
+        customerService.updateOrders(752, List.of(
+                        new OrderPojo(0, LocalDateTime.now(), new PromotionPojo(), "Перемога", Collections.emptySet()),
+                        new OrderPojo(0, LocalDateTime.now(), new PromotionPojo(), "Зрада", Collections.emptySet())
+                )
+        );
+
+//        customerService.save(2, CustomerPojo.builder()
+//                .addressPojos(Set.of(new AddressPojo(0, "Самара", "Ново-Салова", 12  )))
+//                .name("Марат")
+//                .secondName("Князьков")
+//                .middleName("Сергеевич")
+//                .birthday(LocalDateTime.now())
+//                .build());
+
+
+//        var userAddresses = addressService.getByUserId(2);
 //        addressService.saveAddress(new Principal() {
 //            @Override
 //            public String getName() {

@@ -12,7 +12,7 @@ import java.util.Set;
  * DTO for {@link Customer}
  */
 @Builder
-@Value
+@Data
 public class CustomerPojo {
     private long id;
     private String name;

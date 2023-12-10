@@ -39,11 +39,7 @@ public class DefaultAddressService implements AddressService {
 
     @Override
     public Set<AddressPojo> getByPrincipal(Principal principal) {
-        var user = userService.getUserByPrincipal(principal);
-        Set<Address> addresses =  addressRepository.getAddressesByCustomerId(
-                user.getCustomer().getId()
-        );
-        return Util.mapCollection(addresses, AddressPojo::ofEntity, HashSet::new);
+        return getByUserId(userService.getUserIdByPrincipal(principal));
     }
 
     @Override
@@ -55,13 +51,13 @@ public class DefaultAddressService implements AddressService {
     @Transactional
     @Override
     public void save(long userId, AddressPojo address) {
-        save(userService.getUserById(userId), address);
+        save(userService.getUserById(userId, false), address);
     }
 
     @Transactional
     @Override
     public void save(Principal principal, AddressPojo address) {
-        save(userService.getUserByPrincipal(principal), address);
+        save(userService.getUserByPrincipal(principal, false), address);
     }
 
     @Transactional
@@ -69,12 +65,11 @@ public class DefaultAddressService implements AddressService {
     public void save(UserPojo userPojo, AddressPojo addressPojo) {
         User user = userPojo.toEntity();
         Customer customer = user.getCustomer();
-        var address = addressPojo.toEntity();
+        Address address = addressPojo.toEntity();
         addressRepository.save(address);
         customer.getAddresses().add(address);
         customer.setUser(user);
         customerRepository.save(customer);
-//        userService.saveUser(userPojo);
     }
 
     @Override
@@ -98,33 +93,41 @@ public class DefaultAddressService implements AddressService {
     }
 
     @Override
-    public void save(Collection<AddressPojo> addressPojos) {
+    public void  save(Collection<AddressPojo> addressPojos) {
         var addresses = Util.mapCollection(addressPojos, AddressPojo::toEntity, ArrayList::new);
         addressRepository.saveAll(addresses);
     }
 
-    @Override
-    public void delete(long customerId, long addressId) {
-        addressRepository.deleteAddressFromCustomer(customerId, addressId);
+    private void deleteIfEmpty(long addressId) {
         if(addressRepository.getCountByAddressId(addressId) == 0) {
             addressRepository.deleteById(addressId);
         }
     }
 
     @Override
-    public void deleteAllByCustomerId(long customerId) {
-        var addresses = addressRepository.getAddressesByCustomerId(customerId);
-        addressRepository.deleteAllFromCustomerId(customerId);
-        addresses.forEach(address -> {
-            if(addressRepository.getCountByAddressId(address.getId()) == 0) {
-                addressRepository.deleteById(address.getId());
-            }
-        });
+    public void delete(long customerId, long addressId) {
+        addressRepository.deleteAddressesFromCustomer(customerId, addressId);
+        deleteIfEmpty(addressId);
     }
 
     @Override
-    public void deleteAllByCustomer(CustomerPojo customer) {
-        deleteAllByCustomerId(customer.getId());
+    public void delete(long customerId, Collection<AddressPojo> addressPojos) {
+        var ids = addressPojos.stream().map(AddressPojo::getId);
+        addressRepository.deleteAllByIdInBatch(ids::iterator);
+        ids.forEach(this::deleteIfEmpty);
+    }
+
+
+    @Override
+    public void deleteAllFromCustomer(long customerId) {
+        var addresses = addressRepository.getAddressesByCustomerId(customerId);
+        addressRepository.deleteAllAddressesFromCustomer(customerId);
+        addresses.stream().map(Address::getId).forEach(this::deleteIfEmpty);
+    }
+
+    @Override
+    public void deleteAllFromCustomer(CustomerPojo customer) {
+        deleteAllFromCustomer(customer.getId());
     }
 
     @Override

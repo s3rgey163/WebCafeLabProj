@@ -12,7 +12,6 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 public class Category {
     public static final String TABLE_NAME = "product_category";
     public static final String REFERENCE_PK_NAME = TABLE_NAME + "_id";
