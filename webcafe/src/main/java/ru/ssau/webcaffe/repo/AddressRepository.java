@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ssau.webcaffe.entity.Address;
 
 import java.util.Set;
@@ -30,4 +31,9 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 
     @Query("select count(*) from Customer c join c.addresses a where a.id = :id")
     long getCountByAddressId(@NonNull long id);
+
+    @Transactional
+    @Modifying
+    @Query("update Address a set a.state = :state, a.street = :street, a.apartment = :apartment where a.id = :addressId")
+    void update(long addressId, String state, String street, int apartment);
 }

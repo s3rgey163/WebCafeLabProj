@@ -16,15 +16,13 @@ public interface AddressService {
 
     void saveAddress(CustomerPojo customerPojo, AddressPojo address);
 
-    AddressPojo deleteAddress(CustomerPojo customerPojo, long addressId);
-
-    AddressPojo deleteAddress(CustomerPojo customerPojo, AddressPojo addressPojo);
-
-    AddressPojo deleteAddress(long customerId, long addressId);
-
-    AddressPojo deleteAddress(long customerId, AddressPojo addressPojo);
+    void deleteAddress(long customerId, long addressId);
 
     void deleteAllAddresses(long customerId);
 
     void deleteAllAddresses(CustomerPojo customerId);
+
+    void updateAddress(long addressId, AddressPojo newAddress);
+
+    void updateAddress(AddressPojo addressPojo, AddressPojo newAddress);
 }

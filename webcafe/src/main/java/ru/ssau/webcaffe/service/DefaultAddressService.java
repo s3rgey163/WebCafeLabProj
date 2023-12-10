@@ -65,35 +65,11 @@ public class DefaultAddressService implements AddressService {
     }
 
     @Override
-    public AddressPojo deleteAddress(CustomerPojo customerPojo, long addressId) {
-        return deleteAddress(customerPojo.getId(), addressId);
-    }
-
-    @Override
-    public AddressPojo deleteAddress(CustomerPojo customerPojo, AddressPojo addressPojo) {
-        return deleteAddress(customerPojo.getId(), addressPojo.getId());
-    }
-
-    @Override
-    public AddressPojo deleteAddress(long customerId, AddressPojo addressPojo) {
-        return deleteAddress(customerId, addressPojo.getId());
-    }
-
-    @Override
-    public AddressPojo deleteAddress(long customerId, long addressId) {
-        Address address = addressRepository.findById(addressId).orElseThrow(() ->
-            new EntityPersistenceException("Address with id[%d] not found".formatted(addressId))
-        );
+    public void deleteAddress(long customerId, long addressId) {
         addressRepository.deleteAddressFromCustomer(customerId, addressId);
         if(addressRepository.getCountByAddressId(addressId) == 0) {
             addressRepository.deleteById(addressId);
         }
-        return AddressPojo.ofEntity(address);
-    }
-
-    @Override
-    public void deleteAllAddresses(CustomerPojo customer) {
-        deleteAllAddresses(customer.getId());
     }
 
     @Override
@@ -105,5 +81,32 @@ public class DefaultAddressService implements AddressService {
                 addressRepository.deleteById(address.getId());
             }
         });
+    }
+
+    @Override
+    public void deleteAllAddresses(CustomerPojo customer) {
+        deleteAllAddresses(customer.getId());
+    }
+
+    @Override
+    public void updateAddress(long addressId, AddressPojo newAddress) {
+/*        Address address = addressRepository.findById(addressId).orElseThrow(() ->
+                new EntityPersistenceException("Address with id[%d] not found".formatted(addressId))
+        );
+        updateAddress(AddressPojo.ofEntity(address), newAddress);*/
+        addressRepository.update(
+                addressId,
+                newAddress.getState(),
+                newAddress.getStreet(),
+                newAddress.getApartment()
+        );
+    }
+
+    @Override
+    public void updateAddress(AddressPojo addressPojo, AddressPojo newAddress) {
+        addressPojo.setApartment(newAddress.getApartment());
+        addressPojo.setState(addressPojo.getState());
+        addressPojo.setStreet(newAddress.getStreet());
+        addressRepository.save(addressPojo.toEntity());
     }
 }
