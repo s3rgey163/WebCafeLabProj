@@ -28,6 +28,7 @@ public class CustomerPojo {
     private Set<OrderPojo> orderPojos;
 
     public static CustomerPojo ofEntity(Customer customer) {
+        if(customer == null) return null;
         return CustomerPojo.builder()
                 .id(customer.getId())
                 .name(customer.getName())

@@ -29,6 +29,6 @@ public class DefaultAddressServiceTest {
 
     @Test
     void whenFindUserAddresses_thenUserAddressesAvailable() {
-        System.out.println(defaultAddressService.getAddressesByPrincipal(principal));
+        System.out.println(defaultAddressService.getByPrincipal(principal));
     }
 }

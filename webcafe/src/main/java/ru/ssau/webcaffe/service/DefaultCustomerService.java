@@ -7,9 +7,11 @@ import ru.ssau.webcaffe.entity.Customer;
 import ru.ssau.webcaffe.entity.User;
 import ru.ssau.webcaffe.exception.EntityPersistenceException;
 import ru.ssau.webcaffe.pojo.CustomerPojo;
+import ru.ssau.webcaffe.pojo.UserPojo;
 import ru.ssau.webcaffe.repo.CustomerRepository;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 @Service
 @Primary
@@ -20,18 +22,14 @@ public class DefaultCustomerService {
 
     private final AddressService addressService;
 
-    private final DefaultOrderService orderService;
-
     public DefaultCustomerService(
             CustomerRepository customerRepository,
             UserService userService,
-            AddressService addressService,
-            DefaultOrderService orderService
+            AddressService addressService
     ) {
         this.customerRepository = customerRepository;
         this.userService = userService;
         this.addressService = addressService;
-        this.orderService = orderService;
     }
 
     public CustomerPojo getByUserId(long userId) {
@@ -66,12 +64,35 @@ public class DefaultCustomerService {
         return userService.getUserByPrincipal(principal).getCustomer();
     }
 
-    public void saveCustomer(CustomerPojo customerPojo) {
-
+    public void save(long userId, CustomerPojo customerPojo) {
+        UserPojo userPojo = userService.getUserById(userId);
+        addressService.save(customerPojo.getAddressPojos());
+        Customer customer = customerPojo.toEntity();
+        customer.setUser(userPojo.toEntity());
+        customerRepository.save(customer);
     }
 
-    @Transactional
-    public CustomerPojo deleteCustomer(long customerId) {
-        return null;
+    public void save(CustomerPojo customerPojo) {
+        customerRepository.save(customerPojo.toEntity());
+    }
+
+    public void updateFullNameAndBirthday(
+            long customerId,
+            String firstname,
+            String secondname,
+            String middlename,
+            LocalDateTime birthday
+    ) {
+        customerRepository.updateFullNameAndBirthdayById(
+                customerId,
+                firstname,
+                secondname,
+                middlename,
+                birthday
+        );
+    }
+
+    public void deleteByCustomerId(long customerId) {
+        customerRepository.deleteById(customerId);
     }
 }

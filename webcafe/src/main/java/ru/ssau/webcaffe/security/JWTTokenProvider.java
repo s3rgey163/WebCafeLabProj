@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.core.Authentication;
-import ru.ssau.webcaffe.pojo.User;
+import ru.ssau.webcaffe.pojo.UserPojo;
 
 import java.security.Key;
 import java.util.Date;
@@ -22,7 +22,7 @@ public interface JWTTokenProvider {
     Key getAccessKey();
 
     default String generateToken(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        UserPojo user = (UserPojo) authentication.getPrincipal();
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + (long) SecurityAttributes.EXPIRATION_TIME.getValue());
         Map<String, ?> claims = Map.of(

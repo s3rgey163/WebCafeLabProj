@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.ssau.webcaffe.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -13,7 +14,7 @@ import java.util.Set;
 
 @Builder(setterPrefix = "with")
 @Data
-public class User implements UserDetails  {
+public class UserPojo implements UserDetails  {
     private long id;
 
     private String login;
@@ -22,9 +23,9 @@ public class User implements UserDetails  {
 
     private String email;
 
-    private ru.ssau.webcaffe.entity.User.Gender gender;
+    private User.Gender gender;
 
-    private Set<ru.ssau.webcaffe.entity.User.AuthRole> authRole;
+    private Set<User.AuthRole> authRole;
 
     @Builder.Default
     private LocalDateTime created = LocalDateTime.now();
@@ -68,8 +69,8 @@ public class User implements UserDetails  {
                 .toList();
     }
 
-    public static User ofEntity(ru.ssau.webcaffe.entity.User user) {
-        return User.builder()
+    public static UserPojo ofEntity(User user) {
+        return UserPojo.builder()
                 .withId(user.getId())
                 .withLogin(user.getLogin())
                 .withPassword(user.getPassword())
@@ -82,14 +83,14 @@ public class User implements UserDetails  {
 
     }
 
-    public ru.ssau.webcaffe.entity.User toEntity() {
-        return ru.ssau.webcaffe.entity.User.builder()
+    public User toEntity() {
+        return User.builder()
                 .withId(id)
                 .withLogin(login)
                 .withPassword(password)
                 .withEmail(email)
                 .withGender(gender)
-                .withCustomer(customer.toEntity())
+                .withCustomer(customer == null ? null : customer.toEntity())
                 .withAuthRole(authRole)
                 .withCreated(created)
                 .build();

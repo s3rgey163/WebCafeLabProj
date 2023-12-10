@@ -3,7 +3,7 @@ package ru.ssau.webcaffe.util;
 import jakarta.persistence.Persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.ssau.webcaffe.pojo.User;
+import ru.ssau.webcaffe.pojo.UserPojo;
 
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
@@ -86,7 +86,7 @@ public class Util {
     }
 
     public static void main(String[] args) {
-        System.out.println(User.builder().withId(1).build());
+        System.out.println(UserPojo.builder().withId(1).build());
         var l1 = new Object() {
             private Set<Integer> ints = Set.of(1,2,3,4,5,6);
             private String name = "Hello world";

@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.ssau.webcaffe.pojo.User;
+import ru.ssau.webcaffe.pojo.UserPojo;
 import ru.ssau.webcaffe.repo.UserRepository;
 
 @Primary
@@ -25,7 +25,7 @@ public class DefaultUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        return User.ofEntity(userRepository.getUserByEmail(username)
+        return UserPojo.ofEntity(userRepository.getUserByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
                                 getUserNotFoundMsg("email: " + username)
                         )
@@ -33,12 +33,12 @@ public class DefaultUserDetailService implements UserDetailsService {
         );
     }
 
-    public User getUserById(long id) {
+    public UserPojo getUserById(long id) {
         ru.ssau.webcaffe.entity.User user = userRepository.getUsersById(id).orElse(null);
-        return user != null ? User.ofEntity(user) : null;
+        return user != null ? UserPojo.ofEntity(user) : null;
     }
 
-    private static User newUserPojo(ru.ssau.webcaffe.entity.User user) {
-        return User.ofEntity(user);
+    private static UserPojo newUserPojo(ru.ssau.webcaffe.entity.User user) {
+        return UserPojo.ofEntity(user);
     }
 }

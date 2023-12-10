@@ -2,27 +2,34 @@ package ru.ssau.webcaffe.service;
 
 import ru.ssau.webcaffe.pojo.AddressPojo;
 import ru.ssau.webcaffe.pojo.CustomerPojo;
+import ru.ssau.webcaffe.pojo.UserPojo;
 
 import java.security.Principal;
+import java.util.Collection;
 import java.util.Set;
 
 public interface AddressService {
-    AddressPojo getAddressById(long addressId);
-    Set<AddressPojo> getAddressesByPrincipal(Principal principal);
+    AddressPojo getById(long addressId);
+    Set<AddressPojo> getByPrincipal(Principal principal);
 
-    Set<AddressPojo> getAddressesByUserId(long userId);
+    Set<AddressPojo> getByUserId(long userId);
 
-    void saveAddress(long customerId, AddressPojo address);
+    void save(long userId, AddressPojo address);
 
-    void saveAddress(CustomerPojo customerPojo, AddressPojo address);
+    void save(Principal principal, AddressPojo address);
+    void save(UserPojo userPojo, AddressPojo address);
 
-    void deleteAddress(long customerId, long addressId);
+    void save(AddressPojo addressPojo);
 
-    void deleteAllAddresses(long customerId);
+    void save(Collection<AddressPojo> addressPojos);
 
-    void deleteAllAddresses(CustomerPojo customerId);
+    void delete(long customerId, long addressId);
 
-    void updateAddress(long addressId, AddressPojo newAddress);
+    void deleteAllByCustomerId(long customerId);
 
-    void updateAddress(AddressPojo addressPojo, AddressPojo newAddress);
+    void deleteAllByCustomer(CustomerPojo customerId);
+
+    void update(long addressId, AddressPojo newAddress);
+
+    void update(AddressPojo addressPojo, AddressPojo newAddress);
 }

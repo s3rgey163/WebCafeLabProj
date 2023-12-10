@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.ssau.webcaffe.entity.User;
 import ru.ssau.webcaffe.exception.EntityPersistenceException;
 import ru.ssau.webcaffe.payload.request.SignupRequest;
 import ru.ssau.webcaffe.pojo.CustomerPojo;
-import ru.ssau.webcaffe.pojo.User;
+import ru.ssau.webcaffe.pojo.UserPojo;
+import ru.ssau.webcaffe.repo.AddressRepository;
 import ru.ssau.webcaffe.repo.UserRepository;
 
 import java.security.Principal;
@@ -23,19 +25,22 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder pswdEncoder;
 
+    private final AddressRepository addressRepository;
+
     @Autowired
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder pswdEncoder) {
+    public UserService(UserRepository userRepository, AddressRepository addressRepository, BCryptPasswordEncoder pswdEncoder) {
         this.userRepository = userRepository;
         this.pswdEncoder = pswdEncoder;
+        this.addressRepository = addressRepository;
     }
 
-    public User createUser(SignupRequest signupRequest) {
+    public UserPojo createUser(SignupRequest signupRequest) {
         var customer = CustomerPojo.builder()
                 .name(signupRequest.getFirstname())
                 .secondName(signupRequest.getSecondname())
                 .middleName(signupRequest.getMiddlename())
                 .birthday(signupRequest.getBirthday()).build();
-        return User.builder()
+        return UserPojo.builder()
                 .withLogin(signupRequest.getUsername())
                 .withEmail(signupRequest.getEmail())
                 .withGender(signupRequest.getGender())
@@ -44,29 +49,34 @@ public class UserService {
                 .withAuthRole(DEFAULT_ROLES).build();
     }
 
-    public User saveUser(SignupRequest signupRequest) {
-        var user = createUser(signupRequest);
-        lg.debug("Save user: {}", user);
+    public void saveUser(UserPojo userPojo) {
+        lg.debug("Save user: {}", userPojo);
         try {
-            ru.ssau.webcaffe.entity.User userEntity = user.toEntity();
+            User userEntity = userPojo.toEntity();
             userEntity.getCustomer().setUser(userEntity);
+            addressRepository.saveAll(userEntity.getCustomer().getAddresses());
             userRepository.save(userEntity);
         } catch (Exception ex) {
             lg.warn("Unable to save user[login: {}, email: {}]. Cause: ",
-                    user.getLogin(),
-                    user.getEmail(),
+                    userPojo.getLogin(),
+                    userPojo.getEmail(),
                     ex
             );
             throw new EntityPersistenceException("The user[login: %s, email: %s] already exist"
-                    .formatted(user.getLogin(), user.getEmail()),
+                    .formatted(userPojo.getLogin(), userPojo.getEmail()),
                     ex
             );
         }
+    }
+
+    public UserPojo saveUser(SignupRequest signupRequest) {
+        var user = createUser(signupRequest);
+        saveUser(user);
         return user;
     }
 
-    public User update(User newUser, Principal oldUserPrincipal) {
-        User oldUser = getUserByPrincipal(oldUserPrincipal);
+    public UserPojo update(UserPojo newUser, Principal oldUserPrincipal) {
+        UserPojo oldUser = getUserByPrincipal(oldUserPrincipal);
         oldUser.setCustomer(newUser.getCustomer());
         oldUser.setGender(newUser.getGender());
 
@@ -74,11 +84,18 @@ public class UserService {
         return oldUser;
     }
 
-    public User getUserByPrincipal(Principal principal) {
-        ru.ssau.webcaffe.entity.User user = userRepository.getUserByEmail(principal.getName())
+    public UserPojo getUserByPrincipal(Principal principal) {
+       User user = userRepository.getUserByEmail(principal.getName())
                 .orElseThrow(() ->
                         new EntityPersistenceException("Unable find user with name: " + principal.getName())
                 );
-        return User.ofEntity(user);
+        return UserPojo.ofEntity(user);
+    }
+
+    public UserPojo getUserById(long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new EntityPersistenceException("User with id[%d] not found".formatted(userId))
+        );
+        return UserPojo.ofEntity(user);
     }
 }

@@ -26,6 +26,7 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     void deleteAddressFromCustomer(long customerId, long addressId);
 
     @Modifying
+    @Transactional
     @Query(nativeQuery = true, value = "delete from customer_addresses where customer_id = ?1")
     void deleteAllFromCustomerId(long customerId);
 

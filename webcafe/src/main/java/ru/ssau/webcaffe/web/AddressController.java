@@ -22,6 +22,6 @@ public class AddressController {
 
     @GetMapping("{userId}/addresses")
     public Set<AddressPojo> getAddressesByUserId(@PathVariable long userId) {
-        return defaultAddressService.getAddressesByUserId(userId);
+        return defaultAddressService.getByUserId(userId);
     }
 }
