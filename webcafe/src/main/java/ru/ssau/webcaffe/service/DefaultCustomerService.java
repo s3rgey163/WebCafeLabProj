@@ -16,10 +16,7 @@ import ru.ssau.webcaffe.util.Util;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 
 @Service
 @Primary
@@ -109,18 +106,31 @@ public class DefaultCustomerService {
                 birthday
         );
     }
-
-    public void updateOrders(long customerId, Collection<OrderPojo> orders) {
-        customerRepository.updateOrders(
-                customerId,
-                Util.mapCollection(orders, OrderPojo::toEntity, HashSet::new)
-        );
+    public void addOrdersByUserId(long userId, OrderPojo... orders) {
+        long customerId = customerRepository.getCustomerIdByUserId(userId);
+        addOrdersByCustomerId(customerId, orders);
     }
 
-    public void addOrders(long customerId, OrderPojo... orders) {
+    public void updateOrdersByUserId(long userId, Collection<OrderPojo> orderPojos) {
+        long customerId = customerRepository.getCustomerIdByUserId(userId);
+        updateOrdersByCustomerId(customerId, orderPojos);
+    }
+
+    public void updateOrdersByCustomerId(long customerId, Collection<OrderPojo> orderPojos) {
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() ->
+                new EntityPersistenceException("Customer with id[%d] not found"
+                        .formatted(customerId)
+        ));
+        Set<Order> orders = Util.mapCollection(orderPojos, OrderPojo::toEntity, HashSet::new);
+        orders.forEach(order -> order.setCustomer(customer));
+        customer.setOrders(orders);
+        customerRepository.save(customer);
+    }
+
+    public void addOrdersByCustomerId(long customerId, OrderPojo... orders) {
         var currentOrders = orderService.getByCustomerIdOrderByDateTimeDesc(customerId);
         currentOrders.addAll(Arrays.stream(orders).toList());
-        updateOrders(customerId, currentOrders);
+        updateOrdersByCustomerId(customerId, currentOrders);
     }
 
     public void deleteByCustomerId(long customerId) {

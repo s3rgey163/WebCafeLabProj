@@ -6,15 +6,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ru.ssau.webcaffe.pojo.*;
 import ru.ssau.webcaffe.repo.AddressRepository;
+import ru.ssau.webcaffe.repo.CustomerRepository;
 import ru.ssau.webcaffe.service.*;
-import ru.ssau.webcaffe.util.Util;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 
 @SpringBootApplication
@@ -36,6 +33,8 @@ public class WebcaffeApplication implements CommandLineRunner {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private CustomerRepository customerRepository;
     public WebcaffeApplication(
             AddressService addressService,
             DefaultCustomerService customerService,
@@ -75,10 +74,14 @@ public class WebcaffeApplication implements CommandLineRunner {
                 return "sergeyknyz75@gmail.com";
             }
         };
-        customerService.updateOrders(752, List.of(
-                        new OrderPojo(0, LocalDateTime.now(), new PromotionPojo(), "Перемога", Collections.emptySet()),
-                        new OrderPojo(0, LocalDateTime.now(), new PromotionPojo(), "Зрада", Collections.emptySet())
-                )
+//        customerService.updateOrders(1, List.of(
+//                        new OrderPojo(0, LocalDateTime.now(), null, "Перемога", Collections.emptySet()),
+//                        new OrderPojo(1, LocalDateTime.now(), null, "Зрада", Collections.emptySet())
+//                )
+//        );
+
+        customerService.addOrdersByUserId(2,
+                new OrderPojo(0, LocalDateTime.now(), null, "Хай", Collections.emptySet())
         );
 
 //        customerService.save(2, CustomerPojo.builder()

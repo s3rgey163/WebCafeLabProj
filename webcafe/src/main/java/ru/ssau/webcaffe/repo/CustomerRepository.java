@@ -10,10 +10,7 @@ import ru.ssau.webcaffe.entity.Customer;
 import ru.ssau.webcaffe.entity.Order;
 import ru.ssau.webcaffe.entity.User;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
@@ -45,6 +42,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             String middleName,
             LocalDateTime birthday
     );
+
+    @Query("from Customer where id in :ids")
+    Set<Customer> getCustomers(Set<Long> ids);
 
     @Modifying
     @Query("delete from Customer c where c.id = :id")

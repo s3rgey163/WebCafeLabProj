@@ -1,5 +1,6 @@
 package ru.ssau.webcaffe.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Value;
@@ -31,6 +32,7 @@ import java.time.LocalDateTime;
     @NotBlank(message = "The secondname must be filled in")
     String secondname;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT")
     @NotNull(message = "The birthday must be filled in")
     LocalDateTime birthday;
 

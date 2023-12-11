@@ -17,6 +17,8 @@ import ru.ssau.webcaffe.repo.AddressRepository;
 import ru.ssau.webcaffe.repo.UserRepository;
 
 import java.security.Principal;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -42,7 +44,10 @@ public class UserService {
                 .name(signupRequest.getFirstname())
                 .secondName(signupRequest.getSecondname())
                 .middleName(signupRequest.getMiddlename())
-                .birthday(signupRequest.getBirthday()).build();
+                .birthday(signupRequest.getBirthday())
+                .orderPojos(new HashSet<>(0))
+                .addressPojos(new HashSet<>(0))
+                .build();
         return UserPojo.builder()
                 .withLogin(signupRequest.getUsername())
                 .withEmail(signupRequest.getEmail())
@@ -60,8 +65,10 @@ public class UserService {
             Customer customerEntity = userEntity.getCustomer();
             if(customerEntity != null) {
                 customerEntity.setUser(userEntity);
-                customerEntity.getOrders().forEach(order -> order.setCustomer(customerEntity));
-                addressRepository.saveAll(customerEntity.getAddresses());
+                var orders = customerEntity.getOrders();
+                var addresses = customerEntity.getAddresses();
+                if(orders != null) orders.forEach(order -> order.setCustomer(customerEntity));
+                if(addresses != null && !addresses.isEmpty()) addressRepository.saveAll(addresses);
             }
             userRepository.save(userEntity);
         } catch (Exception ex) {
@@ -77,6 +84,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public UserPojo saveUser(SignupRequest signupRequest) {
         var user = createUser(signupRequest);
         saveUser(user);

@@ -33,6 +33,7 @@ public class Customer {
 
     @OneToOne
     @JoinColumn(name = User.PK_NAME, nullable = false)
+    @ToString.Exclude
     private User user;
 
     @ManyToMany(fetch = FetchType.LAZY)

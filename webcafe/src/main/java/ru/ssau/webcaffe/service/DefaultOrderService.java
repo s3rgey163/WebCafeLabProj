@@ -18,14 +18,11 @@ import java.util.List;
 public class DefaultOrderService {
     private OrderRepository orderRepository;
 
-    private UserService userService;
+    private DefaultCustomerService customerService;
 
-    public DefaultOrderService(
-            OrderRepository orderRepository,
-            UserService userService
-    ) {
+    public DefaultOrderService(OrderRepository orderRepository, DefaultCustomerService customerService) {
         this.orderRepository = orderRepository;
-        this.userService = userService;
+        this.customerService = customerService;
     }
 
     private List<OrderPojo> mapToOrderPojoCollection(List<Order> orders) {
@@ -88,16 +85,14 @@ public class DefaultOrderService {
     }
 
     public void save(long userId, OrderPojo orderPojo) {
-        UserPojo user = userService.getUserById(userId, false);
-        user.getCustomer().getOrderPojos().add(orderPojo);
-        userService.saveUser(user);
-
-//        CustomerPojo customerPojo = customerService.getByCustomerId(customerId);
-//        customerPojo.getOrderPojos().add(orderPojo);
-//        customerService.save(userId, customerPojo);
+        customerService.addOrdersByUserId(userId, orderPojo);
     }
 
-    public void deleteByOrderIdAndCustomerId(long customerId, long orderId) {
-        orderRepository.deleteByIdAndCustomerId(orderId, customerId);
+    public void deleteByOrderIdAndCustomerId(long userId, long orderId) {
+        orderRepository.deleteByIdAndCustomerId(orderId, userId);
+    }
+
+    public void deleteByIdAndUserId(long userId, long orderId) {
+        orderRepository.deleteByIdAndCustomerId(orderId, userId);
     }
 }
