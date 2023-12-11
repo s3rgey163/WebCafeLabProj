@@ -3,9 +3,11 @@ package ru.ssau.webcaffe.service;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ru.ssau.webcaffe.entity.Order;
+import ru.ssau.webcaffe.exception.EntityPersistenceException;
 import ru.ssau.webcaffe.pojo.CustomerPojo;
 import ru.ssau.webcaffe.pojo.OrderPojo;
 import ru.ssau.webcaffe.pojo.UserPojo;
+import ru.ssau.webcaffe.repo.CustomerRepository;
 import ru.ssau.webcaffe.repo.OrderRepository;
 import ru.ssau.webcaffe.util.Util;
 
@@ -18,11 +20,11 @@ import java.util.List;
 public class DefaultOrderService {
     private OrderRepository orderRepository;
 
-    private DefaultCustomerService customerService;
+    private CustomerRepository customerRepository;
 
-    public DefaultOrderService(OrderRepository orderRepository, DefaultCustomerService customerService) {
+    public DefaultOrderService(OrderRepository orderRepository, CustomerRepository customerRepository) {
         this.orderRepository = orderRepository;
-        this.customerService = customerService;
+        this.customerRepository = customerRepository;
     }
 
     private List<OrderPojo> mapToOrderPojoCollection(List<Order> orders) {
@@ -85,7 +87,13 @@ public class DefaultOrderService {
     }
 
     public void save(long userId, OrderPojo orderPojo) {
-        customerService.addOrdersByUserId(userId, orderPojo);
+        var customer = customerRepository.getCustomerByUserId(userId).orElseThrow(() ->
+                new EntityPersistenceException("Customer with user id[%d] not found".formatted(userId))
+        );
+        Order order = orderPojo.toEntity();
+        order.setCustomer(customer);
+        customer.getOrders().add(order);
+        customerRepository.save(customer);
     }
 
     public void deleteByOrderIdAndCustomerId(long userId, long orderId) {

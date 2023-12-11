@@ -4,12 +4,16 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import ru.ssau.webcaffe.entity.Category;
 import ru.ssau.webcaffe.entity.Product;
 import ru.ssau.webcaffe.entity.ProductType;
 import ru.ssau.webcaffe.entity.Weight;
 
 import java.math.BigDecimal;
 
+/**
+ * DTO for {@link ProductType}
+ */
 @AllArgsConstructor
 public class ProductTypePojo {
     private long id;

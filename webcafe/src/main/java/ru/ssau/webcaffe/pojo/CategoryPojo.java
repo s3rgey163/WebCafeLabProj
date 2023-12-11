@@ -3,11 +3,15 @@ package ru.ssau.webcaffe.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.ssau.webcaffe.entity.Category;
+import ru.ssau.webcaffe.entity.Customer;
 import ru.ssau.webcaffe.util.Util;
 
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * DTO for {@link Category}
+ */
 @AllArgsConstructor
 @Data
 public class CategoryPojo {

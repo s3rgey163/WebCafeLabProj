@@ -4,10 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.aspectj.weaver.ast.Or;
+import ru.ssau.webcaffe.entity.Category;
 import ru.ssau.webcaffe.entity.Order;
 import ru.ssau.webcaffe.entity.OrderPosition;
 import ru.ssau.webcaffe.entity.ProductType;
 
+/**
+ * DTO for {@link OrderPosition}
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data public class OrderPositionPojo {

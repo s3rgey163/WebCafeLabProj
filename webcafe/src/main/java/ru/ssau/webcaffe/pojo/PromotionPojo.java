@@ -5,12 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.ssau.webcaffe.entity.Category;
 import ru.ssau.webcaffe.entity.Promotion;
 import ru.ssau.webcaffe.util.Util;
 
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * DTO for {@link Promotion}
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

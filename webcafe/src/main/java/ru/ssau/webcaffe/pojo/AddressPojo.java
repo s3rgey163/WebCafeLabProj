@@ -3,7 +3,11 @@ package ru.ssau.webcaffe.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.ssau.webcaffe.entity.Address;
+import ru.ssau.webcaffe.entity.Category;
 
+/**
+ * DTO for {@link Address}
+ */
 @AllArgsConstructor
 @Data public class AddressPojo {
     private long id;

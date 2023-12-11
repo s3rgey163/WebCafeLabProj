@@ -3,6 +3,7 @@ package ru.ssau.webcaffe.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.ssau.webcaffe.entity.Category;
 import ru.ssau.webcaffe.entity.Order;
 import ru.ssau.webcaffe.util.Util;
 
@@ -10,6 +11,9 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * DTO for {@link Order}
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

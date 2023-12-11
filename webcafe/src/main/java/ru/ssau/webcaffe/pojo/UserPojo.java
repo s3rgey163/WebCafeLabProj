@@ -12,6 +12,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * DTO for {@link User}
+ */
 @Builder(setterPrefix = "with")
 @Data
 public class UserPojo implements UserDetails  {
@@ -44,7 +47,7 @@ public class UserPojo implements UserDetails  {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return false;
     }
 
     @Override
