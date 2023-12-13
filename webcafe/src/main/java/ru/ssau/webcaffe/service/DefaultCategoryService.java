@@ -2,10 +2,17 @@ package ru.ssau.webcaffe.service;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ssau.webcaffe.entity.Category;
+import ru.ssau.webcaffe.entity.Product;
 import ru.ssau.webcaffe.exception.EntityPersistenceException;
 import ru.ssau.webcaffe.pojo.CategoryPojo;
+import ru.ssau.webcaffe.pojo.ProductPojo;
 import ru.ssau.webcaffe.repo.CategoryRepository;
+import ru.ssau.webcaffe.util.Util;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Primary
@@ -36,6 +43,12 @@ public class DefaultCategoryService {
         return CategoryPojo.ofEntity(category);
     }
 
+    public List<CategoryPojo> getAllCategories() {
+        return categoryRepository.findAll().stream()
+                .map(CategoryPojo::ofEntity)
+                .collect(Collectors.toList());
+    }
+
     public void save(CategoryPojo categoryPojo) {
         Category category = categoryPojo.toEntity();
         category.getProducts().forEach(product -> {
@@ -44,6 +57,17 @@ public class DefaultCategoryService {
                     productType.setProduct(product)
             );
         });
+        categoryRepository.save(category);
+    }
+
+    public void createCategory(String name, String describe) {
+        createCategory(name, describe, Collections.emptyList());
+    }
+
+    public void createCategory(String name, String describe, List<ProductPojo> productPojos) {
+        Category category = new Category(name, describe);
+        List<Product> products = Util.mapCollection(productPojos, pj -> pj.toEntity(category), ArrayList::new);
+        category.setProducts(products);
         categoryRepository.save(category);
     }
 

@@ -17,7 +17,8 @@ import java.util.stream.IntStream;
 public class Util {
     private static final Logger lg = LoggerFactory.getLogger(Util.class);
 
-    private Util() {}
+    private Util() {
+    }
 
     public static String generateRandomString(
             CharSequence referenceRange,
@@ -34,10 +35,10 @@ public class Util {
 
     public static <T> T cloneContext(Object fromObj, Supplier<T> toObj) {
         T t = toObj.get();
-        for(var field : t.getClass().getDeclaredFields()) {
+        for (var field : t.getClass().getDeclaredFields()) {
             try {
                 Field srcField = fromObj.getClass().getDeclaredField(field.getName());
-                if(!srcField.getType().isPrimitive()) {
+                if (!srcField.getType().isPrimitive()) {
                     lg.warn("Copy context not implemented for non primitive field types. Skip - {}.{}:{}",
                             fromObj.getClass().getSimpleName(),
                             srcField.getName(),
@@ -61,16 +62,26 @@ public class Util {
         }
         return t;
     }
+
     public static <T, R, C extends Collection<R>> C mapPersistenceCollection(
             Collection<T> original,
             Function<T, R> mapper,
             Supplier<C> newCollection
     ) {
-        if(!Persistence.getPersistenceUtil().isLoaded(original)) {
+        if (!Persistence.getPersistenceUtil().isLoaded(original)) {
             return newCollection.get();
         } else {
             return mapCollection(original, mapper, newCollection);
         }
+    }
+
+    public static <T, R, C extends Collection<R>> C mapCollection(
+            Function<T, R> mapper,
+            Supplier<C> newCollection,
+            T... original) {
+        return Arrays.stream(original)
+                .map(mapper)
+                .collect(Collectors.toCollection(newCollection));
     }
 
     public static <T, R, C extends Collection<R>> C mapCollection(
@@ -79,7 +90,7 @@ public class Util {
             Supplier<C> newCollection
     ) {
         Objects.requireNonNull(mapper);
-        if(original.isEmpty()) return newCollection.get();
+        if (original.isEmpty()) return newCollection.get();
         return original.stream()
                 .map(mapper)
                 .collect(newCollection, Collection::add, Collection::addAll);
@@ -88,7 +99,7 @@ public class Util {
     public static void main(String[] args) {
         System.out.println(UserPojo.builder().withId(1).build());
         var l1 = new Object() {
-            private Set<Integer> ints = Set.of(1,2,3,4,5,6);
+            private Set<Integer> ints = Set.of(1, 2, 3, 4, 5, 6);
             private String name = "Hello world";
 
             private int i = 123123;
@@ -120,7 +131,7 @@ public class Util {
                         '}';
             }
         };
-        l2.ints = Set.of(1,2,3);
+        l2.ints = Set.of(1, 2, 3);
         l2.name = "Hi";
         System.out.println(Util.cloneContext(l1, () -> l2));
         System.out.println(l1.ints.hashCode() + " " + l2.ints.hashCode());

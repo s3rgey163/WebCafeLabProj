@@ -6,6 +6,7 @@ import ru.ssau.webcaffe.entity.Category;
 import ru.ssau.webcaffe.entity.Customer;
 import ru.ssau.webcaffe.util.Util;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,7 +49,7 @@ public class CategoryPojo {
                         : Util.mapPersistenceCollection(
                         productPojos,
                         ProductPojo::toEntity,
-                        HashSet::new
+                        ArrayList::new
                 )
         );
     }

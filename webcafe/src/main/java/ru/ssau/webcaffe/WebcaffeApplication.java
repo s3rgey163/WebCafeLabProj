@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ru.ssau.webcaffe.entity.ProductType;
 import ru.ssau.webcaffe.entity.Weight;
 import ru.ssau.webcaffe.entity.WeightType;
 import ru.ssau.webcaffe.pojo.*;
@@ -15,6 +16,8 @@ import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -86,20 +89,12 @@ public class WebcaffeApplication implements CommandLineRunner {
                 return "sergeyknyz75@gmail.com";
             }
         };
+        productService.deleteAllByCategoryId(352);
 //        customerService.updateOrders(1, List.of(
 //                        new OrderPojo(0, LocalDateTime.now(), null, "Перемога", Collections.emptySet()),
 //                        new OrderPojo(1, LocalDateTime.now(), null, "Зрада", Collections.emptySet())
 //                )
 //            );
-        var productTypes = Set.of(
-                new ProductTypePojo(0, new Weight(1, WeightType.KG), new BigDecimal(12.4), "AA"),
-                new ProductTypePojo(1, new Weight(1, WeightType.KG), new BigDecimal(12.4), "AA"));
-        categoryService.save(new CategoryPojo(
-                0,
-                "Второе",
-                "Блюдо второе",
-                Set.of(new ProductPojo(0, "AA", productTypes))
-        ));
 //        customerService.save(2, CustomerPojo.builder()
 //                .addressPojos(Set.of(new AddressPojo(0, "Самара", "Ново-Салова", 12  )))
 //                .name("Марат")

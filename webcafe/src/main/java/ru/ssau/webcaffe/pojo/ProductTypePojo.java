@@ -33,7 +33,11 @@ public class ProductTypePojo {
         );
     }
 
+    public ProductType toEntity(Product product) {
+        return new ProductType(id, weight, product, price, describe);
+    }
+
     public ProductType toEntity() {
-        return new ProductType(id, weight, null, price, describe);
+        return toEntity(null);
     }
 }

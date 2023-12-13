@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 @Entity
@@ -31,9 +32,9 @@ public class Product {
             cascade = CascadeType.ALL
     )
     @ToString.Exclude
-    private Set<ProductType> types;
+    private List<ProductType> types;
 
-    public void setTypes(Set<ProductType> types) {
+    public void setTypes(List<ProductType> types) {
         this.types = types;
         this.types.forEach(s -> s.setProduct(this));
     }

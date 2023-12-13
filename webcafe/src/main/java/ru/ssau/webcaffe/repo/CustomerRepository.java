@@ -49,4 +49,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Modifying
     @Query("delete from Customer c where c.id = :id")
     void deleteById(long id);
+
+    @Query("insert into Customer(name) values (:name)")
+    void test(String name);
 }

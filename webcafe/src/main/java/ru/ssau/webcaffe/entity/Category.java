@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ public class Category {
             cascade = CascadeType.ALL
     )
     @ToString.Exclude
-    private Set<Product> products;
+    private List<Product> products;
 
     public Category() {}
 
@@ -47,7 +48,7 @@ public class Category {
         this(0, name, null, null);
     }
 
-    public Category(String name, String describe, Set<Product> products) {
+    public Category(String name, String describe, List<Product> products) {
         this(0, name, describe, products);
     }
 
@@ -55,7 +56,7 @@ public class Category {
             long id,
             String name,
             String describe,
-            Set<Product> products
+            List<Product> products
     ) {
         this.id = id;
         this.name = name;
@@ -63,8 +64,9 @@ public class Category {
         this.products = products;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
+        if(products == null) return;
         this.products.forEach(p ->  p.setCategory(this));
     }
 

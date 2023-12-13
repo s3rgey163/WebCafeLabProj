@@ -9,8 +9,7 @@ import ru.ssau.webcaffe.entity.Product;
 import ru.ssau.webcaffe.entity.ProductType;
 import ru.ssau.webcaffe.util.Util;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -25,7 +24,11 @@ public class ProductPojo {
 
     private String name;
 
-    private Set<ProductTypePojo> types;
+    private List<ProductTypePojo> types;
+
+    public ProductPojo(long id, String name) {
+        this(id, name, Collections.emptyList());
+    }
 
     public static ProductPojo ofEntity(Product product) {
         return new ProductPojo(
@@ -36,24 +39,28 @@ public class ProductPojo {
                         : Util.mapPersistenceCollection(
                         product.getTypes(),
                         ProductTypePojo::ofEntity,
-                        HashSet::new
+                        ArrayList::new
                 )
         );
     }
 
 
-    public Product toEntity() {
+    public Product toEntity(Category category) {
         return new Product(
                 id,
                 name,
-                null,
+                category,
                 types == null
                         ? null
                         : Util.mapPersistenceCollection(
                         types,
                         ProductTypePojo::toEntity,
-                        HashSet::new
+                        ArrayList::new
                 )
         );
+    }
+
+    public Product toEntity() {
+        return toEntity(null);
     }
 }
