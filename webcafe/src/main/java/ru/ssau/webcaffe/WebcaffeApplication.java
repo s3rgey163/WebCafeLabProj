@@ -89,7 +89,6 @@ public class WebcaffeApplication implements CommandLineRunner {
                 return "sergeyknyz75@gmail.com";
             }
         };
-        productService.deleteAllByCategoryId(352);
 //        customerService.updateOrders(1, List.of(
 //                        new OrderPojo(0, LocalDateTime.now(), null, "Перемога", Collections.emptySet()),
 //                        new OrderPojo(1, LocalDateTime.now(), null, "Зрада", Collections.emptySet())

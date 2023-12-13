@@ -88,15 +88,6 @@ public class DefaultProductService {
         productRepository.updateName(productId, name);
     }
 
-    public void updateProductType(long productId, List<ProductTypePojo> typePojos) {
-        Product product = productRepository.findById(productId).orElseThrow(() ->
-                new EntityPersistenceException("Product with id[%d] not found".formatted(productId)));
-        productRepository.updateProductTypes(
-                productId,
-                Util.mapCollection(typePojos, ptj -> ptj.toEntity(product), ArrayList::new)
-        );
-    }
-
     public void deleteById(long productId) {
         productRepository.deleteById(productId);
     }
