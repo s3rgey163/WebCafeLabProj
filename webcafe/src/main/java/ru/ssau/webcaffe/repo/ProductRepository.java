@@ -15,6 +15,10 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
+    Optional<Product> getByName(String name);
+
+    @Query("from Product p left join p.types where p.name = ?1")
+    Optional<Product> getByNameEager(String name);
     List<Product> getByCategory(Category category);
     List<Product> getByCategoryId(long id);
 

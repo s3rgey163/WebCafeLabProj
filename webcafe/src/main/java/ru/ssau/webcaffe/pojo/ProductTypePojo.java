@@ -40,4 +40,14 @@ public class ProductTypePojo {
     public ProductType toEntity() {
         return toEntity(null);
     }
+
+    @Override
+    public String toString() {
+        return "ProductTypePojo{" +
+                "id=" + id +
+                ", weight=" + weight +
+                ", price=" + price +
+                ", describe='" + describe + '\'' +
+                '}';
+    }
 }

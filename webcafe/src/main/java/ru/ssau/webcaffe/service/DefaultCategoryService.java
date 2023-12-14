@@ -51,12 +51,15 @@ public class DefaultCategoryService {
 
     public void save(CategoryPojo categoryPojo) {
         Category category = categoryPojo.toEntity();
-        category.getProducts().forEach(product -> {
-            product.setCategory(category);
-            product.getTypes().forEach(productType ->
-                    productType.setProduct(product)
-            );
-        });
+        if(category.getProducts() != null) {
+            category.getProducts().stream().filter(product -> product.getTypes() != null)
+                    .forEach(product -> {
+                        product.setCategory(category);
+                        product.getTypes().forEach(productType ->
+                                productType.setProduct(product)
+                        );
+                    });
+        }
         categoryRepository.save(category);
     }
 

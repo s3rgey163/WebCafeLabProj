@@ -2,10 +2,7 @@ package ru.ssau.webcaffe.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.ssau.webcaffe.pojo.AddressPojo;
 import ru.ssau.webcaffe.service.DefaultAddressService;
 
@@ -23,5 +20,13 @@ public class AddressController {
     @GetMapping("{userId}/addresses")
     public Set<AddressPojo> getAddressesByUserId(@PathVariable long userId) {
         return defaultAddressService.getByUserId(userId);
+    }
+
+    @PostMapping("{userId}/addresses")
+    public void createAddress(
+            @PathVariable long userId,
+            @RequestBody AddressPojo addressPojo
+    ) {
+        defaultAddressService.save(userId, addressPojo);
     }
 }

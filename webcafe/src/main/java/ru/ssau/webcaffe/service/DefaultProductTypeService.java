@@ -14,13 +14,14 @@ import ru.ssau.webcaffe.util.Util;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Primary
 public class DefaultProductTypeService {
-    private ProductTypeRepository productTypeRepository;
+    private final ProductTypeRepository productTypeRepository;
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public DefaultProductTypeService(
             ProductTypeRepository productTypeRepository,
@@ -28,10 +29,6 @@ public class DefaultProductTypeService {
     ) {
         this.productTypeRepository = productTypeRepository;
         this.productRepository = productRepository;
-    }
-
-    public DefaultProductTypeService(ProductTypeRepository productTypeRepository) {
-        this.productTypeRepository = productTypeRepository;
     }
 
     public List<ProductTypePojo> getByProduct(Product product) {
@@ -44,18 +41,47 @@ public class DefaultProductTypeService {
         return Util.mapCollection(productTypes,  ProductTypePojo::ofEntity, ArrayList::new);
     }
 
-    public void createProductType(long productId, Weight weight, BigDecimal price, String describe) {
+    private void save(Product product, ProductTypePojo typePojo) {
+        Objects.requireNonNull(product);
+        product.setTypes(List.of(typePojo.toEntity(product)));
+        productRepository.save(product);
+    }
+
+    public void save(String productName, ProductTypePojo typePojo) {
+        Product product = productRepository.getByName(productName).orElseThrow(() ->
+                new EntityPersistenceException("Product type with name[%s] not found"
+                        .formatted(productName))
+        );
+        save(product, typePojo);
+    }
+
+    public void save(long productId, ProductTypePojo typePojo) {
         Product product = productRepository.findById(productId).orElseThrow(() ->
                 new EntityPersistenceException("Product with id[%d] not found".formatted(productId))
         );
-        ProductType productType = new ProductType(
+        save(product, typePojo);
+    }
+
+    public void createProductType(String productName, Weight weight, BigDecimal price, String describe) {
+        ProductTypePojo typePojo = new ProductTypePojo(0,weight,price,describe);
+        save(productName, typePojo);
+    }
+
+    public void createProductType(long productId, Weight weight, BigDecimal price, String describe) {
+        ProductTypePojo productTypePojo = new ProductTypePojo(
                 0,
                 weight,
-                product,
                 price,
                 describe
         );
-        product.setTypes(List.of(productType));
-        productRepository.save(product);
+        save(productId, productTypePojo);
+    }
+
+    public void deleteById(long typeId) {
+        productTypeRepository.deleteById(typeId);
+    }
+
+    public void deleteAllByProductId(long productId) {
+        productTypeRepository.deleteAllByProductId(productId);
     }
 }

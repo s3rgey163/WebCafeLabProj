@@ -27,6 +27,17 @@ public class DefaultProductService {
         this.categoryRepository = categoryRepository;
     }
 
+    public ProductPojo getByName(String name, boolean lazyMode) {
+        Optional<Product> productOptional = lazyMode
+                ? productRepository.getByName(name)
+                : productRepository.getByNameEager(name);
+        Product product = productOptional.orElseThrow(
+                () -> new EntityPersistenceException("Product with name[%s] not found"
+                        .formatted(name))
+        );
+        return ProductPojo.ofEntity(product);
+    }
+
     public List<ProductPojo> getByCategory(Category category, boolean lazyMode) {
         List<Product> products = lazyMode
                 ? productRepository.getByCategory(category)
