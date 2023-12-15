@@ -22,7 +22,6 @@ import ru.ssau.webcaffe.service.ValidationErrorResponse;
 public class AuthController {
     private final AuthService authService;
 
-    @Autowired
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
