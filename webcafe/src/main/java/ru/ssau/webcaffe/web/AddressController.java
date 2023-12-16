@@ -24,7 +24,7 @@ public class AddressController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("user/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public Set<AddressPojo> getAddressesByUserId(@PathVariable long userId) {
         return addressService.getByUserId(userId);
     }
@@ -50,7 +50,7 @@ public class AddressController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("user/{userId}/create")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public MessageResponse createAddress(
             @PathVariable long userId,
             @RequestBody AddressPojo addressPojo
@@ -78,9 +78,25 @@ public class AddressController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("{addressId}/user/{userId}/delete")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public MessageResponse deleteAddressByUserId(@PathVariable long userId, @PathVariable long addressId) {
         addressService.deleteByUserIdAndAddressId(userId, addressId);
         return new MessageResponse("Address successfully deleted");
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("user/delete")
+    public MessageResponse deleteAllAddressesByUserPrincipal(Principal principal) {
+        addressService.deleteAllByUser(principal);
+        return new MessageResponse("Addresses successfully deleted from user: " + principal.getName());
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("user/{userId}/delete")
+    public MessageResponse deleteAllAddressesByUserId(@PathVariable long userId) {
+        addressService.deleteAllByUserId(userId);
+        return new MessageResponse("Addresses successfully deleted from user with id: " + userId);
     }
 }

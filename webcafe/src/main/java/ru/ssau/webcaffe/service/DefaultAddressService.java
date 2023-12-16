@@ -8,7 +8,6 @@ import ru.ssau.webcaffe.entity.Customer;
 import ru.ssau.webcaffe.entity.User;
 import ru.ssau.webcaffe.exception.EntityPersistenceException;
 import ru.ssau.webcaffe.pojo.AddressPojo;
-import ru.ssau.webcaffe.pojo.CustomerPojo;
 import ru.ssau.webcaffe.pojo.UserPojo;
 import ru.ssau.webcaffe.repo.AddressRepository;
 import ru.ssau.webcaffe.repo.CustomerRepository;
@@ -138,12 +137,14 @@ public class DefaultAddressService implements AddressService {
 
     @Override
     public void update(long addressId, AddressPojo newAddress) {
-        addressRepository.update(
-                addressId,
-                newAddress.getState(),
-                newAddress.getStreet(),
-                newAddress.getApartment()
-        );
+        newAddress.setId(addressId);
+        addressRepository.save(newAddress.toEntity());
+//        addressRepository.update(
+//                addressId,
+//                newAddress.getState(),
+//                newAddress.getStreet(),
+//                newAddress.getApartment()
+//        );
     }
 
     @Override

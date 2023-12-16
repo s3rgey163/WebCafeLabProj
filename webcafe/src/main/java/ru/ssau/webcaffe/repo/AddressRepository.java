@@ -21,6 +21,7 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     @Query("select count(a) from Customer c join c.addresses a where a.id = :id")
     int getAddressesCountById(long id);
 
+    @Transactional
     @Modifying
 //    @Query("delete from Customer.addresses a where a.id = (" +
 //            "select ad.id " +

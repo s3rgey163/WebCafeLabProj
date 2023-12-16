@@ -33,7 +33,7 @@ import ru.ssau.webcaffe.entity.Category;
     @Override
     public String toString() {
         return "%s %s кв. %d".formatted(
-                state, state, apartment
+                state, street, apartment
         );
     }
 }

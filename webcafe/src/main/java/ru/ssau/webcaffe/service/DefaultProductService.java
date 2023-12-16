@@ -27,6 +27,13 @@ public class DefaultProductService {
         this.categoryRepository = categoryRepository;
     }
 
+    public ProductPojo getById(long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(() ->
+                new EntityPersistenceException("Product with id[%d] not found"
+                        .formatted(productId))
+        );
+        return ProductPojo.ofEntity(product);
+    }
     public ProductPojo getByName(String name, boolean lazyMode) {
         Optional<Product> productOptional = lazyMode
                 ? productRepository.getByName(name)
@@ -93,6 +100,15 @@ public class DefaultProductService {
         Category category = categoryRepository.getCategoryById(categoryId).orElseThrow(() ->
                 new EntityPersistenceException("Category with id[%d] not found".formatted(categoryId)));
         save(category, productPojos);
+    }
+
+    public void update(long productId, ProductPojo productPojo) {
+        Product product = productRepository.findById(productId).orElseThrow(() ->
+                new EntityPersistenceException("Product with id[%s] not found".formatted(productId)));
+        Product newProduct = productPojo.toEntity();
+        newProduct.setId(productId);
+        newProduct.setCategory(product.getCategory());
+        productRepository.save(newProduct);
     }
 
     public void updateName(long productId, String name) {

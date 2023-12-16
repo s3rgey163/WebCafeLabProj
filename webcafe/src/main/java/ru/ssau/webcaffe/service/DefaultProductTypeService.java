@@ -31,6 +31,14 @@ public class DefaultProductTypeService {
         this.productRepository = productRepository;
     }
 
+    public ProductTypePojo getById(long id) {
+        ProductType productType = productTypeRepository.findById(id).orElseThrow(() ->
+                new EntityPersistenceException("Product type with id[%d] not found"
+                        .formatted(id))
+        );
+        return ProductTypePojo.ofEntity(productType);
+    }
+
     public List<ProductTypePojo> getByProduct(Product product) {
         List<ProductType> productTypes = productTypeRepository.getByProduct(product);
         return Util.mapCollection(productTypes, ProductTypePojo::ofEntity, ArrayList::new);
@@ -43,7 +51,7 @@ public class DefaultProductTypeService {
 
     private void save(Product product, ProductTypePojo typePojo) {
         Objects.requireNonNull(product);
-        product.setTypes(List.of(typePojo.toEntity(product)));
+        product.setTypes(new ArrayList<>(List.of(typePojo.toEntity(product))));
         productRepository.save(product);
     }
 
@@ -53,6 +61,16 @@ public class DefaultProductTypeService {
                         .formatted(productName))
         );
         save(product, typePojo);
+    }
+
+    public void update(long productTypeId, ProductTypePojo productTypePojo) {
+        ProductType productType = productTypeRepository.findById(productTypeId).orElseThrow(() ->
+                new EntityPersistenceException("Product type with id[%d] not found"
+                        .formatted(productTypeId))
+        );
+        ProductType newProductType = productTypePojo.toEntity(productType.getProduct());
+        newProductType.setId(productTypeId);
+        productTypeRepository.save(newProductType);
     }
 
     public void save(long productId, ProductTypePojo typePojo) {
