@@ -10,7 +10,6 @@ import java.util.Set;
 
 @Entity
 @Table
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -36,17 +35,48 @@ public class Customer {
     @ToString.Exclude
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH
+    })
     @ToString.Exclude
     private Set<Address> addresses;
 
     @OneToMany(
-            fetch = FetchType.LAZY,
             mappedBy = "customer",
             cascade = CascadeType.ALL
     )
     @ToString.Exclude
     private Set<Order> orders;
+
+    public Customer(
+            long id,
+            String name,
+            String secondName,
+            String middleName,
+            LocalDateTime birthday,
+            User user,
+            Set<Address> addresses,
+            Set<Order> orders
+    ) {
+        this.id = id;
+        this.name = name;
+        this.secondName = secondName;
+        this.middleName = middleName;
+        this.birthday = birthday;
+        this.user = user;
+        this.addresses = addresses;
+        setOrders(orders);
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+        if(orders != null) {
+            orders.forEach(order -> order.setCustomer(this));
+        }
+    }
 
     @Override
     public final boolean equals(Object o) {

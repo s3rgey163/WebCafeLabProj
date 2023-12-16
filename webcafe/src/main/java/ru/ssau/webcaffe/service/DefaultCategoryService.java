@@ -50,17 +50,7 @@ public class DefaultCategoryService {
     }
 
     public void save(CategoryPojo categoryPojo) {
-        Category category = categoryPojo.toEntity();
-        if(category.getProducts() != null) {
-            category.getProducts().stream().filter(product -> product.getTypes() != null)
-                    .forEach(product -> {
-                        product.setCategory(category);
-                        product.getTypes().forEach(productType ->
-                                productType.setProduct(product)
-                        );
-                    });
-        }
-        categoryRepository.save(category);
+        categoryRepository.save(categoryPojo.toEntity());
     }
 
     public void createCategory(String name, String describe) {

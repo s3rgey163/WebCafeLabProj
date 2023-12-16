@@ -1,8 +1,10 @@
 package ru.ssau.webcaffe.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ssau.webcaffe.entity.Customer;
 import ru.ssau.webcaffe.entity.Order;
 
@@ -70,6 +72,15 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     void deleteByIdAndCustomerId(long id, long customerId);
 
+    @Transactional
+    @Modifying
     @Query("delete from Order o where o.id = :orderId and o.customer.user.id = :userId")
     void deleteByIdAndUserId(long orderId, long userId);
+
+    void deleteAllByCustomerId(long customerId);
+
+    @Transactional
+    @Modifying
+    @Query("delete from Order o where o.customer.id = :userId")
+    void deleteAllByUserId(long userId);
 }

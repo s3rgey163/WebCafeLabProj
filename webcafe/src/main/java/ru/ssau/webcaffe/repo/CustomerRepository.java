@@ -46,10 +46,14 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query("from Customer where id in :ids")
     Set<Customer> getCustomers(Set<Long> ids);
 
+    @Transactional
     @Modifying
     @Query("delete from Customer c where c.id = :id")
     void deleteById(long id);
 
-    @Query("insert into Customer(name) values (:name)")
-    void test(String name);
+    @Transactional
+    @Modifying
+    @Query("delete from Customer c where c.user.id = :userId")
+    void deleteByUserId(long userId);
+
 }

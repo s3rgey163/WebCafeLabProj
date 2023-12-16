@@ -2,6 +2,7 @@ package ru.ssau.webcaffe.pojo;
 
 import lombok.*;
 import ru.ssau.webcaffe.entity.Customer;
+import ru.ssau.webcaffe.entity.User;
 import ru.ssau.webcaffe.util.Util;
 
 import java.time.LocalDateTime;
@@ -46,13 +47,17 @@ public class CustomerPojo {
     }
 
     public Customer toEntity() {
+        return toEntity(null);
+    }
+
+    public Customer toEntity(User user) {
         return new Customer(
                 id,
                 name,
                 secondName,
                 middleName,
                 birthday,
-                null,
+                user,
                 addressPojos == null
                         ? null
                         : Util.mapPersistenceCollection(addressPojos, AddressPojo::toEntity, HashSet::new),

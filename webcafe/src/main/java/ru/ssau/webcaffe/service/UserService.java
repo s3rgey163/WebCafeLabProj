@@ -102,6 +102,7 @@ public class UserService {
 
     private UserPojo getUserPojo(User user, boolean lazyMode) {
         if(!lazyMode) Hibernate.initialize(user.getCustomer().getAddresses());
+        if(!lazyMode) Hibernate.initialize(user.getCustomer().getOrders());
         return UserPojo.ofEntity(user);
     }
 
@@ -111,6 +112,10 @@ public class UserService {
                         new EntityPersistenceException("Unable find user with name: " + principal.getName())
                 );
        return getUserPojo(user, lazyMode);
+    }
+
+    public long getUserIdByCustomerId(long customerId) {
+        return userRepository.getUserIdByCustomerId(customerId);
     }
 
     public long getUserIdByPrincipal(Principal principal) {

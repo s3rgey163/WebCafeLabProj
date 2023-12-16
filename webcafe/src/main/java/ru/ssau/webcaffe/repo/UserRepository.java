@@ -22,6 +22,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> getUserByEmail(String email);
 
     @Query("from User u join u.authRole a where a = :authRole")
-
     List<User> getByAuthRole(User.AuthRole authRole);
+
+    @Query("select u.id from User u where u.customer.id = :customerId")
+    long getUserIdByCustomerId(long customerId);
 }

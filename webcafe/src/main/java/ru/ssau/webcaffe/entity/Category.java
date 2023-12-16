@@ -61,7 +61,7 @@ public class Category {
         this.id = id;
         this.name = name;
         this.describe = describe;
-        this.products = products;
+        setProducts(products);
     }
 
     public void setProducts(List<Product> products) {

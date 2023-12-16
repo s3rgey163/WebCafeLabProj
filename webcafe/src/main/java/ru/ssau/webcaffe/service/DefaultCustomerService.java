@@ -12,6 +12,7 @@ import ru.ssau.webcaffe.pojo.OrderPojo;
 import ru.ssau.webcaffe.pojo.UserPojo;
 import ru.ssau.webcaffe.repo.AddressRepository;
 import ru.ssau.webcaffe.repo.CustomerRepository;
+import ru.ssau.webcaffe.repo.UserRepository;
 import ru.ssau.webcaffe.util.Util;
 
 import java.security.Principal;
@@ -27,17 +28,18 @@ public class DefaultCustomerService {
 
     private final AddressService addressService;
 
-    private final AddressRepository addressRepository;
 
     private final DefaultOrderService orderService;
+    private final UserRepository userRepository;
 
 
-    public DefaultCustomerService(CustomerRepository customerRepository, UserService userService, AddressService addressService, AddressRepository addressRepository, DefaultOrderService orderService) {
+    public DefaultCustomerService(CustomerRepository customerRepository, UserService userService, AddressService addressService, DefaultOrderService orderService,
+                                  UserRepository userRepository) {
         this.customerRepository = customerRepository;
         this.userService = userService;
         this.addressService = addressService;
-        this.addressRepository = addressRepository;
         this.orderService = orderService;
+        this.userRepository = userRepository;
     }
 
     public CustomerPojo getByUserId(long userId) {
@@ -46,6 +48,7 @@ public class DefaultCustomerService {
         );
         return CustomerPojo.ofEntity(customer);
     }
+
 
     public CustomerPojo getByCustomerId(long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(() ->
@@ -73,22 +76,37 @@ public class DefaultCustomerService {
     }
 
     @Transactional
+    public void save(Principal principal, CustomerPojo customerPojo) {
+        long userId = userService.getUserIdByPrincipal(principal);
+        save(userId, customerPojo);
+    }
+
+    @Transactional
     public void save(long userId, CustomerPojo customerPojo) {
-        UserPojo userPojo = userService.getUserById(userId, true);
+        UserPojo userPojo = userService.getUserById(userId, false);
         CustomerPojo currentCustomerPojo = userPojo.getCustomer();
-        if(currentCustomerPojo != null && !currentCustomerPojo.equals(customerPojo)) {
-            addressService.deleteAllByUserId(userId);
-            customerRepository.deleteById(currentCustomerPojo.getId());
+        Customer newCustomer = customerPojo.toEntity(userPojo.toEntity());
+        if(currentCustomerPojo != null) {
+            newCustomer.setId(currentCustomerPojo.getId());
+            if(currentCustomerPojo.getAddressPojos() != null
+                    && !currentCustomerPojo.getAddressPojos().isEmpty()) {
+                addressService.deleteAllByUserId(userId);
+            }
+            if(currentCustomerPojo.getOrderPojos() != null
+                    && !currentCustomerPojo.getOrderPojos().isEmpty()) {
+                orderService.deleteAllByUserId(userId);
+            }
         }
-        Customer customer = customerPojo.toEntity();
-        customer.setUser(userPojo.toEntity());
-        if(customer.getOrders() != null) {
-            customer.getOrders().forEach(order -> order.setCustomer(customer));
-        }
-        if(customer.getAddresses() != null) {
-            addressRepository.saveAll(customer.getAddresses());
-        }
-        customerRepository.save(customer);
+//            customerRepository.deleteById(currentCustomerPojo.getId());
+//        if(newCustomer.getAddresses() != null) {
+//            addressRepository.saveAll(newCustomer.getAddresses());
+//        }
+        customerRepository.save(newCustomer);
+    }
+
+    @Transactional
+    public void updateByCustomerId(long customerId, CustomerPojo customerPojo) {
+        save(userService.getUserIdByCustomerId(customerId), customerPojo);
     }
 
     public void updateFullNameAndBirthday(
@@ -135,5 +153,14 @@ public class DefaultCustomerService {
 
     public void deleteByCustomerId(long customerId) {
         customerRepository.deleteById(customerId);
+    }
+
+    public void deleteByUserId(long userId) {
+        customerRepository.deleteByUserId(userId);
+    }
+
+    public void deleteByUser(Principal principal) {
+        long userId = userService.getUserIdByPrincipal(principal);
+        deleteByUserId(userId);
     }
 }

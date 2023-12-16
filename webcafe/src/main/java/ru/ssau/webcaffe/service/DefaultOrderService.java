@@ -11,6 +11,7 @@ import ru.ssau.webcaffe.repo.CustomerRepository;
 import ru.ssau.webcaffe.repo.OrderRepository;
 import ru.ssau.webcaffe.util.Util;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +23,12 @@ public class DefaultOrderService {
 
     private CustomerRepository customerRepository;
 
-    public DefaultOrderService(OrderRepository orderRepository, CustomerRepository customerRepository) {
+    private UserService userService;
+
+    public DefaultOrderService(OrderRepository orderRepository, CustomerRepository customerRepository, UserService userService) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
+        this.userService = userService;
     }
 
     private List<OrderPojo> mapToOrderPojoCollection(List<Order> orders) {
@@ -96,8 +100,22 @@ public class DefaultOrderService {
         customerRepository.save(customer);
     }
 
-    public void deleteByOrderIdAndCustomerId(long userId, long orderId) {
-        orderRepository.deleteByIdAndCustomerId(orderId, userId);
+    public void deleteAllByUserId(long userId) {
+        orderRepository.deleteAllByUserId(userId);
+    }
+
+    public void deleteAllByUser(Principal principal) {
+        long userId = userService.getUserIdByPrincipal(principal);
+        deleteAllByUserId(userId);
+    }
+
+    public void deleteByOrderIdAndCustomerId(long customerId, long orderId) {
+        orderRepository.deleteByIdAndCustomerId(orderId, customerId);
+    }
+
+    public void deleteAllByIdAndUser(Principal principal, long orderId) {
+        long userId = userService.getUserIdByPrincipal(principal);
+        deleteByIdAndUserId(userId, orderId);
     }
 
     public void deleteByIdAndUserId(long userId, long orderId) {

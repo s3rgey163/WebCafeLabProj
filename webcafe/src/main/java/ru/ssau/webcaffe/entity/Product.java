@@ -9,7 +9,6 @@ import java.util.Objects;
 import java.util.Set;
 @Entity
 @Table
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -25,6 +24,13 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = Category.REFERENCE_PK_NAME)
     private Category category;
+
+    public Product(long id, String name, Category category, List<ProductType> types) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        setTypes(types);
+    }
 
     @OneToMany(
             mappedBy = "product",

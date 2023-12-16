@@ -105,9 +105,9 @@ public class DefaultProductService {
     public void update(long productId, ProductPojo productPojo) {
         Product product = productRepository.findById(productId).orElseThrow(() ->
                 new EntityPersistenceException("Product with id[%s] not found".formatted(productId)));
-        Product newProduct = productPojo.toEntity();
+        Product newProduct = productPojo.toEntity(product.getCategory());
+        productRepository.deleteById(productId);
         newProduct.setId(productId);
-        newProduct.setCategory(product.getCategory());
         productRepository.save(newProduct);
     }
 

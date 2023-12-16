@@ -52,11 +52,12 @@ public class ProductPojo {
                 category,
                 types == null
                         ? null
-                        : Util.mapPersistenceCollection(
-                        types,
-                        ProductTypePojo::toEntity,
-                        ArrayList::new
-                )
+                        : Util.mapCollection(
+                                types,
+                                ProductTypePojo::toEntity,
+                                ArrayList::new
+                        )
+
         );
     }
 
