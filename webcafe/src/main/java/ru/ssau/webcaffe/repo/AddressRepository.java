@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ssau.webcaffe.entity.Address;
 
-import java.util.Collection;
 import java.util.Set;
 
 @Repository
@@ -23,13 +22,28 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     int getAddressesCountById(long id);
 
     @Modifying
-    @Query(nativeQuery = true, value = "delete from customer_addresses where addresses_id = ?2 and customer_id = ?1")
-    void deleteAddressesFromCustomer(long customerId, long addressId);
+//    @Query("delete from Customer.addresses a where a.id = (" +
+//            "select ad.id " +
+//            "from User u join u.customer c " +
+//            "join c.addresses ad " +
+//            "where u.id = :userId and ad.id = :addressId)"
+//    )
+//    @Query(nativeQuery = true, value = "delete from customer_addresses where addresses_id = ?2 and customer_id = ?1")
+    @Query(nativeQuery = true, value = "delete from customer_addresses " +
+            "where addresses_id = ?2 " +
+            "and customer_id = (select c.id from customer c where c.cff_user_id = ?1)")
+    void deleteAddressesByUserIdAndAddressId(long userId, long addressId);
 
     @Modifying
     @Transactional
-    @Query(nativeQuery = true, value = "delete from customer_addresses where customer_id = ?1")
-    void deleteAllAddressesFromCustomer(long customerId);
+//    @Query("delete from Customer.addresses a where a.id in (" +
+//            "select ad.id " +
+//            "from User u join u.customer c " +
+//            "join c.addresses ad where u.id = :userId)")
+//    @Query(nativeQuery = true, value = "delete from customer_addresses where customer_id = ?1")
+    @Query(nativeQuery = true, value = "delete from customer_addresses " +
+            "where customer_id = (select c.id from customer c where c.cff_user_id = ?1)")
+    void deleteAllAddressesByUserId(long userId);
 
     @Query("select count(*) from Customer c join c.addresses a where a.id = :id")
     long getCountByAddressId(@NonNull long id);

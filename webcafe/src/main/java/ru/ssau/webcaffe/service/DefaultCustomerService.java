@@ -77,7 +77,7 @@ public class DefaultCustomerService {
         UserPojo userPojo = userService.getUserById(userId, true);
         CustomerPojo currentCustomerPojo = userPojo.getCustomer();
         if(currentCustomerPojo != null && !currentCustomerPojo.equals(customerPojo)) {
-            addressService.deleteAllFromCustomer(currentCustomerPojo);
+            addressService.deleteAllByUserId(userId);
             customerRepository.deleteById(currentCustomerPojo.getId());
         }
         Customer customer = customerPojo.toEntity();

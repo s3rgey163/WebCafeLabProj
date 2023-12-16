@@ -11,8 +11,9 @@ import ru.ssau.webcaffe.service.DefaultProductService;
 import java.util.List;
 import java.util.Set;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/category")
 @PreAuthorize("permitAll()")
 public class CategoryController {
     private final DefaultCategoryService categoryService;
@@ -37,7 +38,7 @@ public class CategoryController {
         return categoryService.getCategoryById(id, true);
     }
 
-    @PostMapping
+    @PostMapping("create")
     public void createCategory(@RequestBody CategoryPojo categoryPojo) {
         categoryService.save(categoryPojo);
     }

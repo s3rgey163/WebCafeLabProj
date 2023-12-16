@@ -93,7 +93,7 @@ public class DefaultAddressService implements AddressService {
     }
 
     @Override
-    public void  save(Collection<AddressPojo> addressPojos) {
+    public void save(Collection<AddressPojo> addressPojos) {
         var addresses = Util.mapCollection(addressPojos, AddressPojo::toEntity, ArrayList::new);
         addressRepository.saveAll(addresses);
     }
@@ -105,13 +105,19 @@ public class DefaultAddressService implements AddressService {
     }
 
     @Override
-    public void delete(long customerId, long addressId) {
-        addressRepository.deleteAddressesFromCustomer(customerId, addressId);
+    public void deleteByUserIdAndAddressId(long userId, long addressId) {
+        addressRepository.deleteAddressesByUserIdAndAddressId(userId, addressId);
         deleteIfEmpty(addressId);
     }
 
     @Override
-    public void delete(long customerId, Collection<AddressPojo> addressPojos) {
+    public void deleteByUserAndAddressId(Principal principal, long addressId) {
+        long userId = userService.getUserIdByPrincipal(principal);
+        deleteByUserIdAndAddressId(userId, addressId);
+    }
+
+    @Override
+    public void deleteByUserId(long userId, Collection<AddressPojo> addressPojos) {
         var ids = addressPojos.stream().map(AddressPojo::getId);
         addressRepository.deleteAllByIdInBatch(ids::iterator);
         ids.forEach(this::deleteIfEmpty);
@@ -119,15 +125,15 @@ public class DefaultAddressService implements AddressService {
 
 
     @Override
-    public void deleteAllFromCustomer(long customerId) {
-        var addresses = addressRepository.getAddressesByCustomerId(customerId);
-        addressRepository.deleteAllAddressesFromCustomer(customerId);
+    public void deleteAllByUserId(long userId) {
+        var addresses = addressRepository.getAddressesByCustomerId(userId);
+        addressRepository.deleteAllAddressesByUserId(userId);
         addresses.stream().map(Address::getId).forEach(this::deleteIfEmpty);
     }
 
     @Override
-    public void deleteAllFromCustomer(CustomerPojo customer) {
-        deleteAllFromCustomer(customer.getId());
+    public void deleteAllByUser(Principal principal) {
+        deleteAllByUserId(userService.getUserIdByPrincipal(principal));
     }
 
     @Override

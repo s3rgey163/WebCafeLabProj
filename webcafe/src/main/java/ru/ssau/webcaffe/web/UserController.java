@@ -17,11 +17,8 @@ import java.security.Principal;
 public class UserController {
     private final UserService userService;
 
-    private final ValidationErrorResponse validationErrorResponse;
-
-    public UserController(UserService userService, ValidationErrorResponse validationErrorResponse) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.validationErrorResponse = validationErrorResponse;
     }
 
     @GetMapping

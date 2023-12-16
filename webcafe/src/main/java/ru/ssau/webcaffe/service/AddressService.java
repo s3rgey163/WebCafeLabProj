@@ -28,13 +28,15 @@ public interface AddressService {
 
     void save(Collection<AddressPojo> addressPojos);
 
-    void delete(long customerId, long addressId);
+    void deleteByUserIdAndAddressId(long userId, long addressId);
 
-    void delete(long customerId, Collection<AddressPojo> addressPojos);
+    void deleteByUserAndAddressId(Principal principal, long addressId);
 
-    void deleteAllFromCustomer(long customerId);
+    void deleteByUserId(long userId, Collection<AddressPojo> addressPojos);
 
-    void deleteAllFromCustomer(CustomerPojo customerId);
+    void deleteAllByUserId(long userId);
+
+    void deleteAllByUser(Principal principal);
 
     void update(long addressId, AddressPojo newAddress);
 

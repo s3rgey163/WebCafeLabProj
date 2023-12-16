@@ -29,4 +29,11 @@ import ru.ssau.webcaffe.entity.Category;
     public Address toEntity() {
         return new Address(id, state, street, apartment);
     }
+
+    @Override
+    public String toString() {
+        return "%s %s кв. %d".formatted(
+                state, state, apartment
+        );
+    }
 }
