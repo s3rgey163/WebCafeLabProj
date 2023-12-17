@@ -50,14 +50,16 @@ public class WebSecurityConfig {
     public SecurityFilterChain newSecurityFilterChain(HttpSecurity httpSecurity, MvcRequestMatcher.Builder mvc) throws Exception {
         return httpSecurity.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(smc -> smc.sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS)
                 ).authorizeHttpRequests(amr -> amr
-                        /*.requestMatchers(
+                        .requestMatchers(
                                 mvc.pattern((String) SecurityAttributes.SIGN_UP_URLS.getValue())
-                        ).permitAll()*/
-                        .anyRequest().permitAll()
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
+                .httpBasic(Customizer.withDefaults())
                 .exceptionHandling(exh -> exh.authenticationEntryPoint(jwtEntryPoint))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -65,7 +67,7 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-            UserDetailsService userDetailsService,
+            DefaultUserDetailService userDetailsService,
             PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);

@@ -1,5 +1,6 @@
 package ru.ssau.webcaffe.pojo;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +34,7 @@ public class UserPojo implements UserDetails  {
     @Builder.Default
     private LocalDateTime created = LocalDateTime.now();
 
+    @NotNull(message = "Покупатель не найден для данного пользователя")
     private CustomerPojo customer;
 
     @Override
@@ -42,12 +44,12 @@ public class UserPojo implements UserDetails  {
 
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
@@ -87,15 +89,16 @@ public class UserPojo implements UserDetails  {
     }
 
     public User toEntity() {
-        return User.builder()
+        User user =  User.builder()
                 .withId(id)
                 .withLogin(login)
                 .withPassword(password)
                 .withEmail(email)
                 .withGender(gender)
-                .withCustomer(customer == null ? null : customer.toEntity())
                 .withAuthRole(authRole)
                 .withCreated(created)
                 .build();
+        user.setCustomer(customer == null ? null : customer.toEntity(user));
+        return user;
     }
 }

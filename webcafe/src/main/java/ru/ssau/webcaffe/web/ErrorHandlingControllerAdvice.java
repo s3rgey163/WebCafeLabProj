@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import ru.ssau.webcaffe.exception.EntityPersistenceException;
 import ru.ssau.webcaffe.service.ValidationErrorResponse;
 
 import java.util.Map;
@@ -37,6 +38,15 @@ public class ErrorHandlingControllerAdvice {
             MethodArgumentNotValidException e
     ) {
         return ValidationErrorResponse.newFromBindings(e.getBindingResult());
+    }
+
+    @ExceptionHandler(EntityPersistenceException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public String onEntityException(
+            EntityPersistenceException e
+    ) {
+        return e.getMessage();
     }
 
 }

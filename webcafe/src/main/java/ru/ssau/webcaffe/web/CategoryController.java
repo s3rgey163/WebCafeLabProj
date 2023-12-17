@@ -16,7 +16,6 @@ import java.util.Set;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/category")
-@PreAuthorize("permitAll()")
 public class CategoryController {
     private final DefaultCategoryService categoryService;
 

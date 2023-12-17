@@ -11,7 +11,7 @@ public enum SecurityAttributes {
     TOKEN_PREFIX("Bearer "),
     HEADER_STRING("Authorization"),
     CONTENT_TYPE("application/json"),
-    EXPIRATION_TIME(60_000L)
+    EXPIRATION_TIME(864_000_000L)
     ;
 
 

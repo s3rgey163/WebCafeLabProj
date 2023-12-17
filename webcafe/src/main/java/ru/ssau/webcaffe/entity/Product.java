@@ -42,7 +42,9 @@ public class Product {
 
     public void setTypes(List<ProductType> types) {
         this.types = types;
-        this.types.forEach(s -> s.setProduct(this));
+        if(types != null) {
+            this.types.forEach(s -> s.setProduct(this));
+        }
     }
 
     @Override

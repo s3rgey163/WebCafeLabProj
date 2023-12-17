@@ -3,6 +3,8 @@ package ru.ssau.webcaffe.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -70,14 +72,14 @@ public class User {
 
     @Getter
     public enum AuthRole implements GrantedAuthority{
-        USER("Пользователь"),
-        ADMIN("Администратор"),
+        ROLE_USER("Пользователь"),
+        ROLE_ADMIN("Администратор"),
         ;
 
-        private final String name;
+        private final String describe;
 
-        AuthRole(String name) {
-            this.name = name;
+        AuthRole(String describe) {
+            this.describe = describe;
         }
 
         @Override

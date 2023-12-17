@@ -1,8 +1,10 @@
 package ru.ssau.webcaffe.service;
 
+import jakarta.validation.Valid;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.ssau.webcaffe.entity.Address;
 import ru.ssau.webcaffe.entity.Customer;
 import ru.ssau.webcaffe.entity.User;
@@ -17,6 +19,7 @@ import java.util.*;
 
 @Service
 @Primary
+@Validated
 public class DefaultAddressService implements AddressService {
     private final AddressRepository addressRepository;
     private final CustomerRepository  customerRepository;
@@ -61,7 +64,9 @@ public class DefaultAddressService implements AddressService {
 
     @Transactional
     @Override
-    public void save(UserPojo userPojo, AddressPojo addressPojo) {
+    public void save(@Valid UserPojo userPojo, AddressPojo addressPojo) {
+        if(userPojo.getCustomer() == null)
+            throw new EntityPersistenceException("Unable save address, cause customer not exist");
         User user = userPojo.toEntity();
         Customer customer = user.getCustomer();
         Address address = addressPojo.toEntity();

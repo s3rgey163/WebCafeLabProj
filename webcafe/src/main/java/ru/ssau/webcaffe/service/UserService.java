@@ -1,5 +1,6 @@
 package ru.ssau.webcaffe.service;
 
+import jakarta.validation.Valid;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.ssau.webcaffe.entity.Customer;
 import ru.ssau.webcaffe.entity.User;
 import ru.ssau.webcaffe.exception.EntityPersistenceException;
 import ru.ssau.webcaffe.payload.request.SignupRequest;
@@ -17,7 +17,6 @@ import ru.ssau.webcaffe.repo.AddressRepository;
 import ru.ssau.webcaffe.repo.UserRepository;
 
 import java.security.Principal;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +24,7 @@ import java.util.Set;
 public class UserService {
     public static final Logger lg = LoggerFactory.getLogger(UserService.class);
 
-    public static final Set<ru.ssau.webcaffe.entity.User.AuthRole> DEFAULT_ROLES = Set.of(ru.ssau.webcaffe.entity.User.AuthRole.USER);
+    public static final Set<ru.ssau.webcaffe.entity.User.AuthRole> DEFAULT_ROLES = Set.of(ru.ssau.webcaffe.entity.User.AuthRole.ROLE_USER);
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder pswdEncoder;
@@ -54,7 +53,7 @@ public class UserService {
                 .withGender(signupRequest.getGender())
                 .withPassword(pswdEncoder.encode(signupRequest.getPassword()))
                 .withCustomer(customer)
-                .withAuthRole(DEFAULT_ROLES).build();
+                .withAuthRole(signupRequest.getAuthRole()).build();
     }
 
     @Transactional
@@ -62,14 +61,13 @@ public class UserService {
         lg.debug("Save user: {}", userPojo);
         try {
             User userEntity = userPojo.toEntity();
-            Customer customerEntity = userEntity.getCustomer();
-            if(customerEntity != null) {
-                customerEntity.setUser(userEntity);
-                var orders = customerEntity.getOrders();
-                var addresses = customerEntity.getAddresses();
-                if(orders != null) orders.forEach(order -> order.setCustomer(customerEntity));
-                if(addresses != null && !addresses.isEmpty()) addressRepository.saveAll(addresses);
-            }
+//            Customer customerEntity = userEntity.getCustomer();
+//            if(customerEntity != null) {
+//                var orders = customerEntity.getOrders();
+//                var addresses = customerEntity.getAddresses();
+//                if(orders != null) orders.forEach(order -> order.setCustomer(customerEntity));
+//                if(addresses != null && !addresses.isEmpty()) addressRepository.saveAll(addresses);
+//            }
             userRepository.save(userEntity);
         } catch (Exception ex) {
             lg.warn("Unable to save user[login: {}, email: {}]. Cause: ",
@@ -91,18 +89,36 @@ public class UserService {
         return user;
     }
 
+    @Transactional
+    public UserPojo update(@Valid SignupRequest signupRequest, Principal oldPrincipal) {
+        UserPojo newUserPojo = createUser(signupRequest);
+        UserPojo oldUserPojo = getUserByPrincipal(oldPrincipal, false);
+        newUserPojo.setId(oldUserPojo.getId());
+        newUserPojo.setCreated(oldUserPojo.getCreated());
+        if(newUserPojo.getCustomer() != null && oldUserPojo.getCustomer() != null) {
+            newUserPojo.getCustomer().setId(oldUserPojo.getCustomer().getId());
+        }
+        if(newUserPojo.getCustomer() == null && oldUserPojo.getCustomer() != null) {
+            userRepository.deleteById(oldUserPojo.getId());
+        }
+        saveUser(newUserPojo);
+        return newUserPojo;
+    }
+
+    @Transactional
     public UserPojo update(UserPojo newUser, Principal oldUserPrincipal) {
         UserPojo oldUser = getUserByPrincipal(oldUserPrincipal, false);
-        oldUser.setCustomer(newUser.getCustomer());
-        oldUser.setGender(newUser.getGender());
-
-        userRepository.save(oldUser.toEntity());
-        return oldUser;
+        newUser.setId(oldUser.getId());
+        newUser.setCreated(oldUser.getCreated());
+        saveUser(newUser);
+        return newUser;
     }
 
     private UserPojo getUserPojo(User user, boolean lazyMode) {
-        if(!lazyMode) Hibernate.initialize(user.getCustomer().getAddresses());
-        if(!lazyMode) Hibernate.initialize(user.getCustomer().getOrders());
+        if(!lazyMode && user.getCustomer() != null) {
+            Hibernate.initialize(user.getCustomer().getAddresses());
+            if(user.getCustomer().getOrders() != null) Hibernate.initialize(user.getCustomer().getOrders());
+        }
         return UserPojo.ofEntity(user);
     }
 

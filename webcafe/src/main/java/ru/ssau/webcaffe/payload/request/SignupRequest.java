@@ -6,9 +6,9 @@ import lombok.Builder;
 import lombok.Value;
 import ru.ssau.webcaffe.annotation.validation.PasswordMatch;
 import ru.ssau.webcaffe.entity.User;
-import ru.ssau.webcaffe.pojo.AddressPojo;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Builder
 @PasswordMatch(message = "Passwords doesn't match")
@@ -46,4 +46,6 @@ import java.time.LocalDateTime;
 
     @NotNull(message = "The gender must be filled in")
     User.Gender gender;
+
+    Set<User.AuthRole> authRole = Set.of(User.AuthRole.ROLE_USER);
 }

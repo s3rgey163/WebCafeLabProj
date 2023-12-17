@@ -18,7 +18,6 @@ import ru.ssau.webcaffe.service.ValidationErrorResponse;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
-@PreAuthorize("permitAll()")
 public class AuthController {
     private final AuthService authService;
 
