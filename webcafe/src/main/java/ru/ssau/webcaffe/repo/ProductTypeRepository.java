@@ -1,6 +1,7 @@
 package ru.ssau.webcaffe.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ssau.webcaffe.entity.Product;
@@ -14,5 +15,6 @@ public interface ProductTypeRepository extends JpaRepository<ProductType, Long> 
     List<ProductType> getByProductId(long id);
 
     @Transactional
+    @Modifying
     void deleteAllByProductId(long productId);
 }

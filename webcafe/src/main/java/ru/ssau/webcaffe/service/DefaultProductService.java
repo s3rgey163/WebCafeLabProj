@@ -2,6 +2,7 @@ package ru.ssau.webcaffe.service;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ssau.webcaffe.entity.Category;
 import ru.ssau.webcaffe.entity.Customer;
 import ru.ssau.webcaffe.entity.Product;
@@ -11,6 +12,7 @@ import ru.ssau.webcaffe.pojo.ProductTypePojo;
 import ru.ssau.webcaffe.repo.CategoryRepository;
 import ru.ssau.webcaffe.repo.CustomerRepository;
 import ru.ssau.webcaffe.repo.ProductRepository;
+import ru.ssau.webcaffe.repo.ProductTypeRepository;
 import ru.ssau.webcaffe.util.Util;
 
 import java.util.*;
@@ -21,10 +23,13 @@ import java.util.function.Function;
 public class DefaultProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductTypeRepository productTypeRepository;
 
-    public DefaultProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public DefaultProductService(ProductRepository productRepository, CategoryRepository categoryRepository,
+                                 ProductTypeRepository productTypeRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.productTypeRepository = productTypeRepository;
     }
 
     public ProductPojo getById(long productId) {
@@ -102,11 +107,14 @@ public class DefaultProductService {
         save(category, productPojos);
     }
 
+
+    @Transactional
     public void update(long productId, ProductPojo productPojo) {
         Product product = productRepository.findById(productId).orElseThrow(() ->
                 new EntityPersistenceException("Product with id[%s] not found".formatted(productId)));
         Product newProduct = productPojo.toEntity(product.getCategory());
-        productRepository.deleteById(productId);
+//        productRepository.deleteById(productId);
+        if(!product.getTypes().isEmpty()) productTypeRepository.deleteAllByProductId(productId);
         newProduct.setId(productId);
         productRepository.save(newProduct);
     }
