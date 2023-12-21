@@ -16,6 +16,7 @@ import ru.ssau.webcaffe.service.DefaultUserDetailService;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 @Component
 public class JWTFilter extends OncePerRequestFilter {
@@ -61,6 +62,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String header = (String) SecurityAttributes.HEADER_STRING.getValue();
         String tokenPrefix = (String) SecurityAttributes.TOKEN_PREFIX.getValue();
         String bearer = request.getHeader(header);
+        request.getHeaderNames().asIterator().forEachRemaining(System.out::println);
         if (StringUtils.hasText(bearer) && bearer.startsWith(tokenPrefix)) {
             return bearer.split(" ")[1];
         }

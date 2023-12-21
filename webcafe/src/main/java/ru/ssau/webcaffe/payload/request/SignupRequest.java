@@ -15,7 +15,7 @@ import java.util.Set;
 @Value public class SignupRequest {
     public static final String EMAIL_MATCH_PATTERN = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
-    @NotBlank(message = "The username must be filled in")
+//    @NotBlank(message = "The username must be filled in")
     @Size(min = 5)
     String username;
 

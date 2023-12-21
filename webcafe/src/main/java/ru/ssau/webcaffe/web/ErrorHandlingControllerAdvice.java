@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.ssau.webcaffe.exception.EntityPersistenceException;
 import ru.ssau.webcaffe.service.ValidationErrorResponse;
 
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,15 @@ public class ErrorHandlingControllerAdvice {
     @ResponseBody
     public String onEntityException(
             EntityPersistenceException e
+    ) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(SQLException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public String onEntityException(
+            SQLException e
     ) {
         return e.getMessage();
     }

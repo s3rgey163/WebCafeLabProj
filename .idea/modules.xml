@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/client.iml" filepath="$PROJECT_DIR$/client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ssau.web.webcafe.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ssau.web.webcafe.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/webcafe.iml" filepath="$PROJECT_DIR$/.idea/webcafe.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webcafe.webcafe.main.iml" filepath="$PROJECT_DIR$/.idea/modules/webcafe.webcafe.main.iml" />
     </modules>
   </component>
 </project>

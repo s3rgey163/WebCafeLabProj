@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.ssau.webcaffe.entity.User;
 import ru.ssau.webcaffe.exception.EntityPersistenceException;
 import ru.ssau.webcaffe.payload.request.SignupRequest;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
+@Validated
 public class UserService {
     public static final Logger lg = LoggerFactory.getLogger(UserService.class);
 
@@ -38,7 +40,7 @@ public class UserService {
         this.addressRepository = addressRepository;
     }
 
-    public UserPojo createUser(SignupRequest signupRequest) {
+    public UserPojo createUser(@Valid SignupRequest signupRequest) {
         var customer = CustomerPojo.builder()
                 .name(signupRequest.getFirstname())
                 .secondName(signupRequest.getSecondname())
@@ -83,7 +85,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserPojo saveUser(SignupRequest signupRequest) {
+    public UserPojo saveUser(@Valid SignupRequest signupRequest) {
         var user = createUser(signupRequest);
         saveUser(user);
         return user;

@@ -13,7 +13,6 @@ import java.util.Set;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/address")
-
 public class AddressController {
     private final DefaultAddressService addressService;
 
