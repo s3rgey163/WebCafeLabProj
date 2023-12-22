@@ -21,6 +21,7 @@ repositories {
 }
 
 dependencies {
+	implementation(project(':client'))
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -38,6 +39,13 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 }
+
+tasks.register('copyAngularApp', Copy) {
+	from "client/dist/client"
+	into 'static/dist/client'
+}
+
+build.dependsOn copyAngularApp
 
 //tasks.named('test') {
 //	useJUnitPlatform()

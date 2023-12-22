@@ -60,11 +60,17 @@ public class WebSecurityConfig {
                 .sessionManagement(smc -> smc.sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS)
                 ).authorizeHttpRequests(amr -> amr
-                        .requestMatchers(
-                                mvc.pattern((String) SecurityAttributes.SIGN_UP_URLS.getValue()),
-                                mvc.pattern(HttpMethod.OPTIONS, "/**")
-                        ).permitAll()
-                        .anyRequest().authenticated()
+//                        .requestMatchers(
+//                                mvc.pattern((String) SecurityAttributes.SIGN_UP_URLS.getValue()),
+//                                mvc.pattern(HttpMethod.OPTIONS, "/**")
+//                        ).permitAll()
+                                .requestMatchers(
+                                        mvc.pattern((String) SecurityAttributes.SIGN_UP_URLS.getValue()),
+                                        mvc.pattern(HttpMethod.OPTIONS, "/**")
+                                ).permitAll()
+                                .requestMatchers(
+                                        mvc.pattern("/api/**")
+                                ).authenticated().anyRequest().permitAll()
                 )
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exh -> exh.authenticationEntryPoint(jwtEntryPoint))

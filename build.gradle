@@ -1,0 +1,4 @@
+allprojects {
+    group = 'ru.ssau'
+    version = '0.0.1-SNAPSHOT'
+}
